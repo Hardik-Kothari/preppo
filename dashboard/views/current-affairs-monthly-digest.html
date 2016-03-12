@@ -1,0 +1,58 @@
+<div class="template-container">
+    <div class="navbar-top">
+        <div class="navbar-headers" ng-click="$parent.goTo('Daily Updates')">
+            DAILY UPDATES
+        </div>
+        <div class="navbar-headers active">
+            MONTHLY DIGEST
+        </div>
+        <div class="navbar-headers" ng-click="$parent.goTo('Quiz')">
+            QUIZ
+        </div>
+        <div style="cursor: pointer; float: right; padding-right: 12px;" ng-show="user.userInfo.loggedIn">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" style="border: none; background-color: rgba(0, 0, 0, 0); color: white; height: 24px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+                    <li><a role="button" tabindex="0" class="dropdown-labels">Profile</a></li>
+                    <li><a role="button" tabindex="0" class="dropdown-labels" ng-click="logout()">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="user-greeting" ng-show="user.userInfo.loggedIn">
+            Hi, {{user.getFirstName()}}
+        </div>
+    </div>
+    <div id="all-digests">
+        <div style="height: 24px;"></div>
+        <div style="height: 24px; padding-left: 15px;">
+            <img src="./resources/bulb.svg" style="height: 20px; width: 20px; float: left;">
+            <div style="width: 12px; height: 24px; float:left;"></div>
+            <p class="batti-message">Choose a month and read a summary of current affairs</p>
+        </div>
+        <div style="padding-top: 9px;" ng-show="fetched">
+            <div class="row" style="margin: 0px; padding: 9px 0px;" ng-repeat="digest in digests track by $index">
+                <div class="col-xs-12 col-sm-9 col-md-7 col-lg-5">
+                    <a target="_blank" href="{{digest.url}}" style="width: 100%; text-decoration: none;">
+                        <div class="digest-card" ng-class="getClassName($index)">
+                            {{digest.name}}
+                            <div class="right-chevron">
+                                <img src="./resources/right-chevron.svg">
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div style="padding-top: 9px;" ng-show="!fetched">
+            <div class="row" style="margin: 0px; padding: 9px 0px;">
+                <div class="col-xs-12 col-sm-9 col-md-7 col-lg-5">
+                    <div class="digest-card" style="box-shadow: none; background-color: rgba(0, 0, 0, 0); border: none; line-height: 0px; text-align: center;">
+                        <div class="mdl-spinner mdl-js-spinner is-active"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,337 @@
+<!doctype html>
+<html ng-app="dashboardApp" style="height:100%;">
+    <head>
+        
+        <meta charset="utf-8">
+        <title>Dashboard - Preppo</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <meta name="google-signin-scope" content="profile email">
+        <meta name="google-signin-client_id" content="851960487439-kjv325718755mjfociosthd29i0v951q.apps.googleusercontent.com">
+        
+        <link rel="stylesheet" type='text/css' href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type='text/css' href="./styles/style.css">
+
+        <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="../bower_components/angular/angular.min.js"></script>
+        <script src="../bower_components/angular-route/angular-route.min.js"></script>
+        <script src="../bower_components/angular-cookies/angular-cookies.min.js"></script>
+        <script src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+        <script src="./scripts/dashboard.js"></script>
+        <script src="./scripts/material.js"></script>
+        <script src="https://apis.google.com/js/api:client.js"></script>
+        
+    </head>
+   
+    <body ng-controller="MainController" style="height:100%;">
+        <div style="position: fixed; top: 0px; left: 0px; height: 100%; width: 100%; background-color: black; opacity: 0.7; z-index:10000;" ng-show="loading"></div>
+        <div style="background-color: white; position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%); height: 52px; width: 52px; z-index:10001; padding: 12px; border-radius:50%;" ng-show="loading">
+            <div class="mdl-spinner mdl-js-spinner is-active"></div>
+        </div>
+        <div id='side-panel' class="hidden-xs">
+            <div id='brand-name'><img src="./resources/logo.svg" style="height: 36px; width: 90px;"></div>
+            <div style="height: 50px;"></div>
+            <div id="major-categories">
+                <div id="live-categories">
+                    <div class="categories active">
+                        <img src="./resources/current-affairs.svg" style="margin-right: 6px;">
+                        <span>Current Affairs</span>
+                    </div>
+                </div>
+                <div style="height: 60px;"></div>
+                <div id="coming-soon-banner">COMING SOON</div>
+                <div id="coming-soon-banner-triangle"></div>
+                <div style="clear: both;"></div>
+                <div style="height: 12px;"></div>
+                <div id="coming-soon-categories">
+                    <div class="categories">
+                        <img src="./resources/mock-test.svg" style="margin-right: 6px;">
+                        <span>Mock Test</span>
+                    </div>
+                    <div class="categories">
+                        <img src="./resources/live-test.svg" style="margin-right: 6px;">
+                        <span>Live Test</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId      : '1146866128671054',
+                    cookie     : true,  // enable cookies to allow the server to access 
+                    // the session
+                    xfbml      : true,  // parse social plugins on this page
+                    version    : 'v2.5' // use graph api version 2.5
+                });
+
+                // Now that we've initialized the JavaScript SDK, we call 
+                // FB.getLoginStatus().  This function gets the state of the
+                // person visiting this page and can return one of three states to                // the callback you provide.  They can be:
+                //
+                // 1. Logged into your app ('connected')
+                // 2. Logged into Facebook, but not your app ('not_authorized')
+                // 3. Not logged into Facebook and can't tell if they are logged into
+                //    your app or not.
+                //
+                // These three cases are handled in the callback function.
+
+                //FB.getLoginStatus(function(response) {
+                  //  statusChangeCallback(response);
+                //});
+
+            };
+
+            // Load the SDK asynchronously
+            (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/en_US/sdk.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+          // Here we run a very simple test of the Graph API after login is
+          // successful.  See statusChangeCallback() for when this call is made.
+        </script>
+        <script>
+            var googleUser = {};
+            var startApp = function() {
+                gapi.load('auth2', function() {
+                    // Retrieve the singleton for the GoogleAuth library and set up the client.
+                    auth2 = gapi.auth2.init({
+                        client_id: '851960487439-kjv325718755mjfociosthd29i0v951q.apps.googleusercontent.com',
+                        cookiepolicy: 'single_host_origin',
+                        // Request scopes in addition to 'profile' and 'email'
+                        //scope: 'additional_scope'
+                    });
+                    attachSignUp(document.getElementById('googleSignUpBtn'));
+                    attachLogin(document.getElementById('googleLoginBtn'));
+                });
+            };
+
+            function attachLogin(element) {
+                auth2.attachClickHandler(element, {}, function(googleUser) {
+                    var token = googleUser.getAuthResponse().id_token;
+                    console.log("token : " + token);
+                    angular.element(document.getElementById('googleLoginBtn')).scope().google('login', token);
+                });
+            }
+
+            function attachSignUp(element) {
+                auth2.attachClickHandler(element, {}, function(googleUser) {
+                    var token = googleUser.getAuthResponse().id_token;
+                    angular.element(document.getElementById('googleSignUpBtn')).scope().google('signup', token);
+                });
+            }
+
+            startApp();
+        </script>
+        <!-- Login/Signup starts-->
+        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog my-modal-dialog" role="document">
+                <div class="modal-content" style="border-radius: 0px; background-color: #ffffff;">
+                    <div ng-show=" modalData.type == 'signUp' &&  modalData.step == 1 ">
+                        <div style="background-color: #3e50b4; color: white; background-image: url('./resources/woman-hand-smartphone-desk.png'); background-size: cover;">
+                            <div style="height: 20px;"></div>
+                            <div style="height: 36px; line-height: 36px; text-align: center;">
+                                <img src="./resources/logo2.svg">
+                            </div>
+                            <div style="text-align: center; font-size: 14px; font-weight: 300;">
+                                Simple. Precise. Reliable.
+                            </div>
+                            <div style="height: 20px;"></div>
+                            <div class="form-tabs active-tab">
+                                SIGN UP
+                            </div>
+                            <div class="form-tabs" ng-click=" modalData.type = 'login'; ">
+                                LOG IN
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                        <div class="row" style="margin: 0px;">
+                            <div class="col-sm-offset-2 col-sm-8 col-xs-offset-1 col-xs-10" style="padding: 0px 12px;">
+                                <div style="height: 24px;"></div>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="sample1" ng-model="modalData.signUp.mobileNo">
+                                    <label class="mdl-textfield__label" for="sample1" style="font-weight: 300;">MOBILE NO</label>
+                                </div>
+                                <div style="height: 15px;"></div>
+                                <div class="form-button" ng-click="signUp(1)">SIGN UP</div>
+                                <div style="height: 4px;"></div>
+                                <div class="centered-grey-text">I agree to the Terms and conditions</div>
+                                <div style="height: 18px;"></div>
+                                <div style="float: left; width: 30%;"><hr></div>
+                                <div class="centered-grey-text" style="float: left; width: 40%; padding-top: 12px;">Or Continue with</div>
+                                <div style="float: left; width: 30%;"><hr></div>
+                                <div style="clear: both;"></div>
+                                <div class="social-login-button" style="background-color: #e04a33; float: left;" id="googleSignUpBtn">
+                                    <img src="./resources/gplus-icon.svg" style="margin-right: 6px;">Google
+                                </div>
+                                <div class="social-login-button" style="background-color: #3b5998; float: right;" ng-click="fb('signup')">
+                                    <img src="./resources/fb-icon.svg" style="margin-right: 6px;">Facebook
+                                </div>
+                                <div style="clear: both;"></div>
+                                <div style="height: 24px;"></div>
+                            </div>
+                        </div>                
+                    </div>
+                    <div ng-show=" modalData.type == 'login' &&  modalData.step == 1 ">
+                        <div style="background-color: #3e50b4; color: white; background-image: url('./resources/woman-hand-smartphone-desk.png'); background-size: cover;">
+                            <div style="height: 20px;"></div>
+                            <div style="height: 36px; line-height: 36px; text-align: center;">
+                                <img src="./resources/logo2.svg">
+                            </div>
+                            <div style="text-align: center; font-size: 14px; font-weight: 300;">
+                                Simple. Precise. Reliable.
+                            </div>
+                            <div style="height: 20px;"></div>
+                            <div class="form-tabs" ng-click=" modalData.type = 'signUp'; ">
+                                SIGN UP
+                            </div>
+                            <div class="form-tabs active-tab">
+                                LOG IN
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                        <div class="row" style="margin: 0px;">
+                            <div class="col-sm-offset-2 col-sm-8 col-xs-offset-1 col-xs-10" style="padding: 0px 12px;">
+                                <div style="height: 24px;"></div>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="sample2" ng-model="modalData.login.mobileNo">
+                                    <label class="mdl-textfield__label" for="sample2" style="font-weight: 300;">MOBILE NO</label>
+                                </div>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="password" id="sample3" ng-model="modalData.login.password">
+                                    <label class="mdl-textfield__label" for="sample3" style="font-weight: 300;">PASSWORD</label>
+                                </div>
+                                <div style="height: 12px;"></div>
+                                <div class="form-button" ng-click="login(1)">LOGIN</div>
+                                <div style="height: 4px;"></div>
+                                <div class="centered-grey-text" style="cursor: pointer;" ng-click="guyForgotPassword();">Forgot Password ?</div>
+                                <div style="height: 18px;"></div>
+                                <div style="float: left; width: 30%;"><hr></div>
+                                <div class="centered-grey-text" style="padding-top: 12px; float: left; width: 40%">Or Continue with</div>
+                                <div style="float: left; width: 30%;"><hr></div>
+                                <div style="clear: both;"></div>
+                                <div class="social-login-button" style="background-color: #e04a33; float: left;" id="googleLoginBtn">
+                                    <img src="./resources/gplus-icon.svg" style="margin-right: 6px;">Google
+                                </div>
+                                <div class="social-login-button" style="background-color: #3b5998; float: right;" ng-click="fb('login')">
+                                    <img src="./resources/fb-icon.svg" style="margin-right: 6px;">Facebook
+                                </div>
+                                <div style="clear: both;"></div>
+                                <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                                <div style="height: 24px;"></div>
+                            </div>
+                        </div>                
+                    </div>
+                    <div ng-show=" modalData.type == 'signUp' &&  modalData.step == 2 ">
+                        <div class="modal-headers">
+                            <img src="./resources/back-button.svg" style="float: left; cursor: pointer;" ng-click="modalData.step = 1;">
+                            We sent you an SMS
+                        </div>
+                        <div class="row" style="margin: 0px;">
+                            <div class="col-sm-offset-2 col-sm-8 col-xs-offset-1 col-xs-10" style="padding: 0px 12px;">
+                                <div class="centered-grey-text" style="font-size: 14px;">Please enter the verification code sent to +91{{modalData.signUp.mobileNo}}</div>
+                                <div style="height: 24px;"></div>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="sample4" ng-model="modalData.signUp.code">
+                                    <label class="mdl-textfield__label" for="sample4" style="font-weight: 300;">CODE</label>
+                                </div>
+                                <div style="height: 12px;"></div>
+                                <div class="form-button" ng-click="signUp(2)">CONTINUE
+                                </div>
+                                <div class="centered-grey-text" style="cursor: pointer;" ng-click="sendCode(modalData.signUp.mobileNo)">Resend Code ?
+                                </div>
+                                <div style="height: 24px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-show=" modalData.type == 'signUp' &&  modalData.step == 3 ">
+                        <div class="modal-headers">
+                            <img src="./resources/back-button.svg" style="float: left; cursor: pointer;" ng-click="modalData.step = 2;">
+                            You're almost done
+                        </div>
+                        <div class="row" style="margin: 0px;">
+                            <div class="col-sm-offset-2 col-sm-8 col-xs-offset-1 col-xs-10" style="padding: 0px 12px;">
+                                <div class="centered-grey-text" style="font-size: 14px;">Secure your account and start your preparations</div>
+                                <div style="height: 24px;"></div>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="sample5" ng-model="modalData.signUp.name">
+                                    <label class="mdl-textfield__label" for="sample5" style="font-weight: 300;">YOUR NAME</label>
+                                </div>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="sample6" ng-model="modalData.signUp.email">
+                                    <label class="mdl-textfield__label" for="sample6" style="font-weight: 300;">EMAIL</label>
+                                </div>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="sample7" ng-model="modalData.signUp.password">
+                                    <label class="mdl-textfield__label" for="sample7" style="font-weight: 300;">PASSWORD</label>
+                                </div>
+                                <div style="height: 12px;"></div>
+                                <div class="form-button" ng-click="signUp(3)">CONTINUE
+                                </div>
+                                <div style="height: 24px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Login/Signup ends-->
+
+        <!-- Forget Password modal starts-->
+        <div class="modal fade" id="forgotPasswordModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document" style="width: 500px;">
+                <div class="modal-content" style="border-radius: 0px; background-color: #ffffff;">
+                        <div style="background-color: #3e50b4; color: white; background-image: url('./resources/woman-hand-smartphone-desk.png'); background-size: cover;">
+                            <div style="height: 20px;"></div>
+                            <div style="height: 36px; line-height: 36px; text-align: center;">
+                                <img src="./resources/logo2.svg">
+                            </div>
+                            <div style="text-align: center; font-size: 14px; font-weight: 300;">
+                                Simple. Precise. Reliable.
+                            </div>
+                            <div style="height: 20px;"></div>
+                            <div class="form-tabs active-tab" style="float: none; width: 100%; cursor: default;">
+                                RESET PASSWORD
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                        <div class="row" style="margin: 0px;">
+                            <div class="col-sm-offset-2 col-sm-8 col-xs-12" style="padding: 0px 12px;">
+                                <div style="height: 24px;"></div>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                                    <input class="mdl-textfield__input" type="text" id="sample9" ng-model="forgotPasswordModalData.mobileNo" ng-disabled="forgotPasswordModalData.step != 1 ">
+                                    <label class="mdl-textfield__label" for="sample9" style="font-weight: 300;">MOBILE NO</label>
+                                </div>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ng-show=" forgotPasswordModalData.step != 1 ">
+                                    <input class="mdl-textfield__input" type="text" id="sample10" ng-model="forgotPasswordModalData.otp" ng-disabled="forgotPasswordModalData.step == 3 ">
+                                    <label class="mdl-textfield__label" for="sample10" style="font-weight: 300;">OTP</label>
+                                </div>
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" ng-show=" forgotPasswordModalData.step == 3 ">
+                                    <input class="mdl-textfield__input" type="text" id="sample11" ng-model="forgotPasswordModalData.password">
+                                    <label class="mdl-textfield__label" for="sample11" style="font-weight: 300;">NEW PASSWORD</label>
+                                </div>
+                                <div style="height: 12px;"></div>
+                                <div class="form-button" ng-click="sendCodeForgotPasswordModal()" ng-show=" forgotPasswordModalData.step == 1">VERIFY</div>
+                                <div class="form-button" ng-click="verifyCodeForgotPasswordModal()" ng-show=" forgotPasswordModalData.step == 2">SUBMIT</div>
+                                <div class="form-button" ng-click="resetPassword()" ng-show=" forgotPasswordModalData.step == 3">RESET PASSWORD</div>
+                                <div class="centered-grey-text" style="font-size: 75%; cursor: pointer;" ng-click="sendCode(forgotPasswordModalData.mobileNo)" ng-show=" forgotPasswordModalData.step == 2">Resend OTP ?
+                                </div>
+                                <div style="height: 24px;"></div>
+                            </div>
+                        </div>                
+                    </div>
+                </div>
+            </div>
+        <!-- Forget Password modal ends-->
+        
+        <div id='main-panel'>
+            <div ng-view style="height: 100%;"></div>
+        </div>
+    </body>
+
+</html>

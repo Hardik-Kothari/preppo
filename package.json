@@ -1,0 +1,11 @@
+{
+  "name": "preppo",
+  "version": "1.0.0",
+  "description": "Web app for preparation of some exams",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hardik Kothari",
+  "license": "ISC"
+}

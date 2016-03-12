@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="37px" height="40px" viewBox="0 0 37 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.5.2 (25235) - http://www.bohemiancoding.com/sketch -->
+    <title>Cup Copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Web" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Quiz" sketch:type="MSArtboardGroup" transform="translate(-302.000000, -177.000000)" stroke-linecap="round" stroke="#EA5A5A" stroke-linejoin="round">
+            <g id="Monthly-Copy" sketch:type="MSLayerGroup" transform="translate(267.000000, 151.000000)">
+                <g id="Cup-Copy" transform="translate(36.000000, 27.000000)" sketch:type="MSShapeGroup">
+                    <rect id="Rectangle-441-Copy-3" x="10.6861349" y="28.1213627" width="13.7327543" height="1.79168078" rx="2"></rect>
+                    <rect id="Rectangle-441-Copy-2" x="6.84710351" y="36.4691888" width="21.4230966" height="1.79168078"></rect>
+                    <rect id="Rectangle-441" x="8.55333966" y="29.8604931" width="18.1272356" height="6.71880292"></rect>
+                    <g id="Oval-188-Copy-+-Oval-188-Copy-2-+-Oval-188">
+                        <path d="M8.40833175,16.2472494 C3.70683997,15.2294513 0.173645147,10.8826942 0.173645147,5.67480039 C0.173645147,4.71773244 0.292969444,3.7897471 0.516940461,2.90616075 L5.49096714,2.90616075" id="Oval-188-Copy-2"></path>
+                        <path d="M34.8826907,16.2472494 C30.1811989,15.2294513 26.6480041,10.8826942 26.6480041,5.67480039 C26.6480041,4.71773244 26.7673284,3.7897471 26.9912994,2.90616075 L31.9653261,2.90616075" id="Oval-188-Copy-3" transform="translate(30.765347, 9.576705) scale(-1, 1) translate(-30.765347, -9.576705) "></path>
+                        <path d="M18.6027261,21.1098604 C24.7124659,20.4223361 29.5063212,13.7689671 29.5063212,5.6627325 C29.5063212,3.8504479 29.2667143,2.11078057 28.8263644,0.494160042 L6.28701818,0.494160042 C5.84666832,2.11078057 5.60706138,3.8504479 5.60706138,5.6627325 C5.60706138,13.7335319 10.3590971,20.36414 16.4306088,21.1005026 L16.4306088,28.0794056 L18.6027261,28.0794056 L18.6027261,21.1098604 Z" id="Oval-188"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

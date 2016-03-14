@@ -267,6 +267,7 @@ a {
     height: 75px;
     line-height: 75px;
     float: left;
+    vertical-align: bottom;
 }
 
 .quiz-card .right-chevron {

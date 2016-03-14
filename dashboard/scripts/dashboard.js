@@ -355,6 +355,16 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
     };
     
     $scope.fb = function(type) {
+        FB.ui({
+            method: 'share',
+            href: 'https://developers.facebook.com/docs/',
+        }, function(response){
+            console.log("response : " + JSON.stringify(response));
+        });
+    };
+    
+    /*
+    $scope.fb = function(type) {
         FB.login(function(response) {
             if (response.status === 'connected') {
                 // Logged into your app and Facebook.
@@ -377,6 +387,11 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
                     if($scope.goto != 'nowhere') {
                         $scope.goTo($scope.goto);   
                     }
+                    FB.ui({
+  method: 'share',
+  href: 'https://developers.facebook.com/docs/',
+}, function(response){});
+                    
                 }, function errorCallback(response){
                     if(response.data.error == "INVALID_TOKEN") {
                         alert("Invalid token.");
@@ -396,7 +411,7 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
             }
         }, {scope: 'public_profile, email, user_friends'});
     };
-    
+    */
     $scope.showLoginModal = function(type, goto) {
         $scope.resetModalData(type);
         $scope.goto = goto;

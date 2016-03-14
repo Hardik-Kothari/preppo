@@ -47,49 +47,46 @@ preppo.factory('viewingLang', function() {
 preppo.factory('userService', ['$http', 'apiDomainName', '$cookies', function($http, apiDomainName, $cookies) {
     var userInfo = {
         loggedIn: false,
-        name: "",
-        username: "",
-        photo: "",
-        sessionToken: ""
+        sessionToken: "",
+        lang: "english",
+        sharedOnFb: false
     };
     
     function setUserInfoFromCookie() {
-        userInfo.name = $cookies.get('name');
-        userInfo.username = $cookies.get('username');
-        userInfo.photo = $cookies.get('photo');
         userInfo.sessionToken = $cookies.get('sessionToken');
+        userInfo.sharedOnFb = ($cookies.get('sharedOnFb')=="false")?false:true;
+        userInfo.lang = "english";
+        userInfo.loggedIn = false;
         
-        if(typeof(userInfo.sessionToken) != "undefined" && userInfo.sessionToken.length > 0) {
+        if(userInfo.sessionToken) {
             userInfo.loggedIn = true;
         }
-        
+        if($cookies.get('lang')) {
+            userInfo.lang = $cookies.get('lang');
+        }
         return;
     }
     
-    function setUserInfoAndCookie(name, username, photo, sessionToken) {
-        userInfo.name = name;
-        userInfo.username = username;
-        userInfo.photo = photo;
+    function setUserInfoAndCookie(sessionToken, sharedOnFb, lang) {
         userInfo.sessionToken = sessionToken;
+        userInfo.lang = lang;
+        userInfo.sharedOnFb = sharedOnFb;
         userInfo.loggedIn = true;
         var date = new Date("October 13, 9999 11:13:00");
-        $cookies.put('name', name, {expires: date});
-        $cookies.put('username', username, {expires: date});
-        $cookies.put('photo', photo, {expires: date});
         $cookies.put('sessionToken', sessionToken, {expires: date});
+        $cookies.put('lang', lang, {expires: date});
+        $cookies.put('sharedOnFb', sharedOnFb?"true":"false", {expires: date});
         return;
     }
     
     function clearUserInfoAndCookie() {
-        $cookies.remove('name');
-        $cookies.remove('username');
-        $cookies.remove('photo');
         $cookies.remove('sessionToken');
+        $cookies.remove('lang');
+        $cookies.remove('sharedOnFb');
         userInfo.loggedIn = false;
-        userInfo.name = '';
-        userInfo.username = '';
-        userInfo.photo = '';
         userInfo.sessionToken = '';
+        userInfo.lang = 'english';
+        userInfo.sharedOnFb = false;
     }
     
     function getFirstName() {
@@ -108,8 +105,7 @@ preppo.factory('userService', ['$http', 'apiDomainName', '$cookies', function($h
         userInfo: userInfo,
         setUserInfoFromCookie: setUserInfoFromCookie,
         setUserInfoAndCookie: setUserInfoAndCookie,
-        clearUserInfoAndCookie: clearUserInfoAndCookie,
-        getFirstName: getFirstName
+        clearUserInfoAndCookie: clearUserInfoAndCookie
     };
     
     return obj;
@@ -145,8 +141,6 @@ preppo.factory('quizService', function() {
 preppo.controller('MainController', ['$scope', 'userService', 'categories', 'subCategories', '$location', 'apiDomainName', '$http', function($scope, userService, categories, subCategories, $location, apiDomainName, $http) {
     $scope.currentCategory = categories[0];
     $scope.loading = false;
-    $scope.goto = ""; //nowhere, Monthly Digest, Quiz
-    //$scope.currentSubCategory = subCategories[$scope.currentCategory][0];
     
     userService.setUserInfoFromCookie();
     
@@ -172,199 +166,16 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
     goTo(subCategories[$scope.currentCategory][0]);
     $scope.goTo = goTo;
     
-    /*-------------------------------------*/
-    // Related to login/signup
-    
-    $scope.travel = function(dest) {
-        if(userService.userInfo.loggedIn) {
-            $scope.goTo(dest);
+    $scope.travel = function(subCat) {
+        if(userService.userInfo.loggedIn && userService.userInfo.sharedOnFb) {
+            $scope.goTo(subCat);
         }
         else {
-            $scope.showLoginModal('login', dest);
+            $('#shareModal').modal('show');
         }
     };
     
-    $scope.modalData = {
-        signUp: {
-            mobileNo: "",
-            code: "",
-            name: "",
-            email: "",
-            password: ""
-        },
-        login: {
-            mobileNo: "",
-            password: ""
-        },
-        type: 'signUp',
-        step: 1
-    };
-    
-    $scope.forgotPasswordModalData = {
-        mobileNo: "",
-        otp: "",
-        password: "",
-        step: 1
-    };
-    
-    $scope.resetModalData = function(type) {
-        $scope.modalData.signUp.mobileNo = "";
-        $scope.modalData.signUp.code = "";
-        $scope.modalData.signUp.name = "";
-        $scope.modalData.signUp.password = "";
-        $scope.modalData.signUp.email = "";
-        $scope.modalData.login.mobileNo = "";
-        $scope.modalData.login.password = "";
-        $scope.modalData.type = type;
-        $scope.modalData.step = 1;
-    };
-    
-    $scope.resetForgotPasswordModalData = function() {
-        $scope.forgotPasswordModalData.mobileNo = "";
-        $scope.forgotPasswordModalData.otp = "";
-        $scope.forgotPasswordModalData.password = "";
-        $scope.forgotPasswordModalData.step = 1;
-    };
-    
-    $scope.login = function(step) {
-        $scope.loading = true;
-        var data = {
-            phone: $scope.modalData.login.mobileNo,
-            password: $scope.modalData.login.password
-        };
-        var config = {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-        var url = apiDomainName + '/auth/login';
-        $http.post(url, data, config).then(function successCallback(response) {
-            var data = response.data;
-            userService.setUserInfoAndCookie(data['user'].name, data['user'].username, (!data['user'].photo?"":data['user'].photo), data['x-session-token']);
-            userService.setUserInfoFromCookie();
-            $scope.loading = false;
-            $scope.hideLoginModal();
-            if($scope.goto != 'nowhere') {
-                console.log("login hehe : " + $scope.goto);
-                $scope.goTo($scope.goto);   
-            }
-        }, function errorCallback(response){
-            $scope.loading = false;
-            if(response.data.error == "INVALID_CREDENTIALS") {
-                alert("Invalid password.");
-            }
-            else if(response.data.error == "USER_NOT_FOUND") {
-                alert("User not found.");
-            }
-            else {
-                console.log('error : ' + JSON.stringify(response));
-            } 
-        });
-    };
-    
-    $scope.signUp = function(step) {
-        if(step == 1) {
-            $scope.loading = true;
-            var data = {
-                phone: $scope.modalData.signUp.mobileNo
-            };
-            var config = {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            };
-            var url = apiDomainName + '/auth/otp';
-            $http.post(url, data, config).then(function successCallback(response) {
-                var data = response.data;
-                $scope.loading = false;
-                $scope.modalData.step = 2; 
-            }, function errorCallback(response){
-                $scope.loading = false;
-                console.log('error : ' + JSON.stringify(response));
-            });
-        }
-        else if(step == 2) {
-            $scope.modalData.step = 3;
-        }
-        else {
-            $scope.loading = true;
-            var data = {
-                phone: $scope.modalData.signUp.mobileNo,
-                otp: $scope.modalData.signUp.code,
-                name: $scope.modalData.signUp.name,
-                email: $scope.modalData.signUp.email,
-                password: $scope.modalData.signUp.password
-            };
-            var config = {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            };
-            var url = apiDomainName + '/auth/signup';
-            $http.post(url, data, config).then(function successCallback(response) {
-                var data = response.data;
-                userService.setUserInfoAndCookie(data['user'].name, data['user'].username, (!data['user'].photo?"":data['user'].photo), data['x-session-token']);
-                userService.setUserInfoFromCookie();
-                $scope.loading = false;
-                $scope.hideLoginModal();
-                if($scope.goto != 'nowhere') {
-                    $scope.goTo($scope.goto);   
-                }
-            }, function errorCallback(response){
-                $scope.loading = false;
-                if(response.data.error == "USER_ALREADY_EXISTS") {
-                    alert("User already exists.");
-                }
-                else if(response.data.error == "INVALID_OTP") {
-                    alert("OTP incorrect.");
-                }
-                else {
-                    console.log('error : ' + JSON.stringify(response));   
-                }
-            });
-        } 
-    };
-    
-    $scope.google = function(type, token) {
-        var data = {
-            googleToken: token
-        };
-        var config = {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-        var url = apiDomainName + '/auth/' + type;
-        $http.post(url, data, config).then(function successCallback(response) {
-            var data = response.data;
-            userService.setUserInfoAndCookie(data['user'].name, data['user'].username, (!data['user'].photo?"":data['user'].photo), data['x-session-token']);
-            userService.setUserInfoFromCookie();
-            $scope.hideLoginModal();
-            if($scope.goto != 'nowhere') {
-                $scope.goTo($scope.goto);   
-            }
-        }, function errorCallback(response){
-            console.log("error");
-            if(response.data.error == "INVALID_TOKEN") {
-                alert("Invalid token.");
-            }
-            else {
-                console.log('error : ' + JSON.stringify(response));
-            } 
-        });
-    };
-    
-    $scope.fb = function(type) {
-        FB.ui({
-            method: 'share',
-            href: 'https://developers.facebook.com/docs/',
-        }, function(response){
-            console.log("response : " + JSON.stringify(response));
-        });
-    };
-    
-    /*
-    $scope.fb = function(type) {
+    $scope.fb = function() {
         FB.login(function(response) {
             if (response.status === 'connected') {
                 // Logged into your app and Facebook.
@@ -378,20 +189,44 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
                         'Content-Type': 'application/json'
                     }
                 };
-                var url = apiDomainName + '/auth/' + type;
+                var url = apiDomainName + '/auth/login';
                 $http.post(url, data, config).then(function successCallback(response) {
                     var data = response.data;
-                    userService.setUserInfoAndCookie(data['user'].name, data['user'].username, (!data['user'].photo?"":data['user'].photo), data['x-session-token']);
-                    userService.setUserInfoFromCookie();
-                    $scope.hideLoginModal();
-                    if($scope.goto != 'nowhere') {
-                        $scope.goTo($scope.goto);   
+                    var usr = data['user'];
+                    userService.setUserInfoAndCookie(data['x-session-token'], usr.sharedOnFb?true: false, usr.lang?usr.lang:'english');
+                    //userService.setUserInfoFromCookie();
+                    if(!usr.sharedOnFb) {
+                        FB.ui({
+                            method: 'share',
+                            href: 'http://onequestiondaily.preppo.in',
+                        }, function(response){
+                            if(response['post_id']) {
+                                var data = {
+                                    sharedOnFb: true
+                                };
+                                var config = {
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'x-session-token': data['x-session-token']
+                                    }
+                                };
+                                var url = apiDomainName + '/users/me';
+                                $http.put(url, data, config).then(function successCallback(response) {
+                                    $('#shareModal').modal('hide');
+                                    $scope.goTo('Monthly Digest');
+                                }, function errorCallback(response){
+                                    console.log('error : ' + JSON.stringify(response));
+                                }); 
+                            }
+                            else {
+                                //
+                            }
+                        });
                     }
-                    FB.ui({
-  method: 'share',
-  href: 'https://developers.facebook.com/docs/',
-}, function(response){});
-                    
+                    else {
+                        $('#shareModal').modal('hide');
+                        $scope.goTo('Monthly Digest');
+                    }
                 }, function errorCallback(response){
                     if(response.data.error == "INVALID_TOKEN") {
                         alert("Invalid token.");
@@ -409,128 +244,12 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
                 // they are logged into this app or not.
                 console.log("else")
             }
-        }, {scope: 'public_profile, email, user_friends'});
-    };
-    */
-    $scope.showLoginModal = function(type, goto) {
-        $scope.resetModalData(type);
-        $scope.goto = goto;
-        $('#loginModal').modal('show');
+        }, {scope: 'public_profile, email, user_friends, publish_actions'});
     };
     
-    $scope.hideLoginModal = function() {
-        $('#loginModal').modal('hide');
-    };
-    
-    $scope.showForgotPasswordModal = function() {
-        $scope.resetForgotPasswordModalData();
-        $('#forgotPasswordModal').modal('show');
-    };
-    
-    $scope.hideForgotPasswordModal = function() {
-        $('#forgotPasswordModal').modal('hide');
-    };
-    
-    $scope.sendCode = function(phone) {
-        var data = {
-            phone: phone
-        };
-        var config = {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-        var url = apiDomainName + '/auth/otp';
-        $http.post(url, data, config).then(function successCallback(response) {
-            var data = response.data;
-            console.log('data : ' + JSON.stringify(data));
-        }, function errorCallback(response){
-            console.log('error : ' + JSON.stringify(response));
-        });
-    };
-    
-    $scope.sendCodeForgotPasswordModal = function() {
-        var data = {
-            phone: $scope.forgotPasswordModalData.mobileNo
-        };
-        var config = {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-        var url = apiDomainName + '/auth/otp';
-        $http.post(url, data, config).then(function successCallback(response) {
-            $scope.forgotPasswordModalData.step = 2;
-        }, function errorCallback(response){
-            console.log('error : ' + JSON.stringify(response));
-        });
-    };
-    
-    $scope.verifyCodeForgotPasswordModal = function() {
-        var data = {
-            phone: $scope.forgotPasswordModalData.mobileNo,
-            otp: $scope.forgotPasswordModalData.otp
-        };
-        var config = {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-        var url = apiDomainName + '/auth/login';
-        $http.post(url, data, config).then(function successCallback(response) {
-            var data = response.data;
-            userService.setUserInfoAndCookie(data['user'].name, data['user'].username, (!data['user'].photo?"":data['user'].photo), data['x-session-token']);
-            $scope.forgotPasswordModalData.step = 3;
-        }, function errorCallback(response){
-            if(response.data.error == "INVALID_OTP") {
-                alert("OTP incorrect.");
-            }
-            else if(response.data.error == "USER_NOT_FOUND") {
-                alert("User not found.");
-            }
-            else {
-                console.log('error : ' + JSON.stringify(response));
-            }
-        });
-    };
-    
-    $scope.resetPassword = function() {
-        var data = {
-            password: $scope.forgotPasswordModalData.password
-        };
-        var config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-session-token': userService.userInfo.sessionToken
-            }
-        };
-        var url = apiDomainName + '/users/me';
-        $http.put(url, data, config).then(function successCallback(response) {
-            var data = response.data;
-            alert("Password successfully reset");
-            $scope.hideForgotPasswordModal();
-        }, function errorCallback(response){
-            if(response.data.error == "UNAUTHENTICATED") {
-                alert("Unauthenticated.");
-            }
-            else if(response.data.error == "NOT_FOUND") {
-                alert("User not found.");
-            }
-            else {
-                console.log('error : ' + JSON.stringify(response));
-            } 
-        }); 
-    };
-    
-    $scope.guyForgotPassword = function() {
-        $('#loginModal').modal('hide');
-        $scope.showForgotPasswordModal();
-    };
-    /*-------------------------------------*/
 }]);
 
-preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http', 'dateToString', 'apiDomainName', 'viewingLang', function($scope, userService, $http, dateToString, apiDomainName, viewingLang) {
-    $scope.viewingLang = viewingLang;
+preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http', 'dateToString', 'apiDomainName', '$location', function($scope, userService, $http, dateToString, apiDomainName, $location) {
     $http.defaults.withCredentials = true;
     $scope.dateToString = dateToString;
     $scope.currentDate = new Date('2016-02-03');
@@ -542,24 +261,8 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
     $scope.firstDate = new Date();
     $scope.user = userService;
     $scope.isSliding = false;
-    
-    $scope.logout = function() {
-        $scope.$parent.loading = true;
-        var url = apiDomainName + '/auth/logout';
-        var config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-session-token': $scope.user.userInfo.sessionToken
-            }
-        };
-        $http.get(url, config).then(function successCallback(response){
-            $scope.user.clearUserInfoAndCookie();
-            $scope.$parent.loading = false;
-        }, function errorCallback(response){
-            console.log(JSON.stringify(response));
-            $scope.$parent.loading = false;
-        });
-    };
+    $scope.errorDate = new Date();
+    $scope.normal = true;
     
     function start() {
         var dt = new Date($scope.currentDate.getTime());
@@ -608,14 +311,14 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
                         $scope.newsIndexToBeCompared = $scope.currentNews;
                     }
                 }, function errorCallback(response) {
-                    $scope.fetchingStatus = 0;
+                    $scope.fetchingStatus = 4;
                 });     
             }
             else {
                 $scope.fetchingStatus = 2;
                 for(var i=0; i<response.data.length; i++) {
-                            response.data[i]['dateString'] = dateString;
-                        }
+                    response.data[i]['dateString'] = dateString;
+                }
                 $scope.newsUpdates = response.data;
                 $scope.fetchInfo[dateString] = {
                     len : response.data.length,
@@ -631,17 +334,7 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
     }
     start();
     
-    $scope.goTo = function(subCat) {
-        if(userService.userInfo.loggedIn) {
-            $scope.$parent.goTo(subCat);
-        }
-        else {
-            $scope.showLoginModal();
-        }
-    };
-    
     $scope.fetchData = function(date) {
-        
         var dt = new Date(date.getTime());
         dt.setDate(dt.getDate() - 1);
         var prevDateString = dateToString.convert(dt);
@@ -667,16 +360,26 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
                     response.data[i]['dateString'] = prevDateString;
                 }
                 if($scope.currentNews == $scope.newsUpdates.length) {
-                    $scope.newsIndexToBeCompared = $scope.currentNews;  
+                    $scope.normal = false;
+                    $scope.newsIndexToBeCompared = $scope.currentNews;
+                    $scope.newsUpdates = $scope.newsUpdates.concat(response.data);
+                    $scope.fetchInfo[prevDateString] = {
+                        len : response.data.length,
+                        total : $scope.fetchInfo[dateString].total + $scope.fetchInfo[dateString].len,
+                        isLastDate : true
+                    };
+                    $scope.normal = true;
+                } else {
+                    $scope.newsUpdates = $scope.newsUpdates.concat(response.data);
+                    $scope.fetchInfo[prevDateString] = {
+                        len : response.data.length,
+                        total : $scope.fetchInfo[dateString].total + $scope.fetchInfo[dateString].len,
+                        isLastDate : true
+                    };
                 }
-                $scope.newsUpdates = $scope.newsUpdates.concat(response.data);
-                $scope.fetchInfo[prevDateString] = {
-                    len : response.data.length,
-                    total : $scope.fetchInfo[dateString].total + $scope.fetchInfo[dateString].len,
-                    isLastDate : true
-                };
             }
         }, function errorCallback(response) {
+            $scope.errorDate = date;
             $scope.fetchingStatus = 0;
         });
     };
@@ -755,6 +458,10 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
         return dt;
     };
     
+    $scope.refreshPage = function() {
+        $location.path('/currentAffairs/dailyUpdates');
+    };
+    
 }]);
 
 preppo.controller('CAMonthlyDigestController', ['$scope', 'userService', '$http', 'apiDomainName', '$location', '$window', function($scope, userService, $http, apiDomainName, $location, $window) {
@@ -781,25 +488,6 @@ preppo.controller('CAMonthlyDigestController', ['$scope', 'userService', '$http'
     }
     fetchData();
     
-    $scope.logout = function() {
-        $scope.$parent.loading = true;
-        var url = apiDomainName + '/auth/logout';
-        var config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-session-token': $scope.user.userInfo.sessionToken
-            }
-        };
-        $http.get(url, config).then(function successCallback(response){
-            $scope.user.clearUserInfoAndCookie();
-            $scope.$parent.loading = false;
-            $location.path('/currentAffairs/dailyUpdates');
-        }, function errorCallback(response){
-            $scope.$parent.loading = false;
-            console.log(JSON.stringify(response));
-        });
-    };
-    
     $scope.getClassName = function(index) {
         return $scope.classNames[index % $scope.classNames.length];
     };
@@ -813,25 +501,6 @@ preppo.controller('CAQuizHomeController', ['$scope', 'userService', '$http', 'da
     $scope.dateToString = dateToString;
     $scope.user = userService;
     $scope.fetched = false;
-    
-    $scope.logout = function() {
-        $scope.$parent.loading = true;
-        var url = apiDomainName + '/auth/logout';
-        var config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-session-token': $scope.user.userInfo.sessionToken
-            }
-        };
-        $http.get(url, config).then(function successCallback(response){
-            $scope.user.clearUserInfoAndCookie();
-            $scope.$parent.loading = false;
-            $location.path('/currentAffairs/dailyUpdates');
-        }, function errorCallback(response){
-            $scope.$parent.loading = false;
-            console.log(JSON.stringify(response));
-        });
-    };
     
     function fetchData() {
         var config = {
@@ -910,14 +579,13 @@ preppo.controller('CAQuizHomeController', ['$scope', 'userService', '$http', 'da
     
 }]);
 
-preppo.controller('CAQuizOfficeController', ['$scope', 'userService', '$http', '$routeParams', 'viewingLang', 'apiDomainName', 'quizService', '$window', '$location', function($scope, userService, $http, $routeParams, viewingLang, apiDomainName, quizService, $window, $location) {
+preppo.controller('CAQuizOfficeController', ['$scope', 'userService', '$http', '$routeParams', 'apiDomainName', 'quizService', '$window', '$location', function($scope, userService, $http, $routeParams, apiDomainName, quizService, $window, $location) {
     $scope.id = $routeParams.id;
     $scope.quiz = quizService.quiz;
     $scope.questions = [];
     $scope.currentQuestionIndex = 1;
     $scope.showNextButton = false;
     $scope.correctAnswers = 0;
-    $scope.viewingLang = viewingLang.current;
     $scope.isLoading = false;
     $scope.showSummary = false;
     $scope.questionData = {
@@ -943,28 +611,9 @@ preppo.controller('CAQuizOfficeController', ['$scope', 'userService', '$http', '
     $scope.bottomButtonLabel = "NEXT";
     $scope.user = userService;
     
-    $scope.logout = function() {
-        $scope.$parent.loading = true;
-        var url = apiDomainName + '/auth/logout';
-        var config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'x-session-token': $scope.user.userInfo.sessionToken
-            }
-        };
-        $http.get(url, config).then(function successCallback(response){
-            $scope.user.clearUserInfoAndCookie();
-            $scope.$parent.loading = false;
-            $location.path('/currentAffairs/dailyUpdates');
-        }, function errorCallback(response){
-            $scope.$parent.loading = false;
-            console.log(JSON.stringify(response));
-        });
-    };
-    
     function resetQuestion() {
         var question = $scope.questions[$scope.currentQuestionIndex - 1];
-        var langs = viewingLang.langs;
+        var langs = ['english', 'hindi'];
         var options = {
             english: [],
             hindi: []
@@ -1040,7 +689,7 @@ preppo.controller('CAQuizOfficeController', ['$scope', 'userService', '$http', '
         if(!$scope.showNextButton) {
             $scope.showNextButton = true;
             $scope.clickedIndex = index;
-            if($scope.questionData.correctAnswer[viewingLang.current] == index) {
+            if($scope.questionData.correctAnswer[$scope.user.userInfo.lang] == index) {
                 $scope.correctAnswers++;
             }
         }

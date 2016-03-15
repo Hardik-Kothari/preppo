@@ -1,16 +1,16 @@
 @font-face {
     font-family: 'charter';
-    src: url('../fonts/charter.ttf');
+    src: url('../../fonts/charter.ttf');
 }
 
 @font-face {
     font-family: 'robMed';
-    src: url('../fonts/Roboto-Medium.ttf');
+    src: url('../../fonts/Roboto-Medium.ttf');
 }
 
 @font-face {
     font-family: 'robReg';
-    src: url('../fonts/Roboto-Regular.ttf');
+    src: url('../../fonts/Roboto-Regular.ttf');
 }
 
 a {

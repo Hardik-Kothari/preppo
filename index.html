@@ -1,28 +1,72 @@
 <!doctype html>
-<html ng-app="homeApp" style="height:100%;">
+<html>
     <head>
-    
         <meta charset="utf-8">
         <title>Preppo - Lets prepare!!</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-        <meta name="google-signin-scope" content="profile email">
-        <meta name="google-signin-client_id" content="851960487439-kjv325718755mjfociosthd29i0v951q.apps.googleusercontent.com">
         
-        <link rel="stylesheet" href="./bower_components/bootstrap/dist/css/bootstrap.min.css">
-
-        <script src="./bower_components/jquery/dist/jquery.min.js"></script>
-        <script src="./bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script src="./bower_components/angular/angular.min.js"></script>
-        <script src="./bower_components/angular-route/angular-route.min.js"></script>
-        <script src="./bower_components/angular-cookies/angular-cookies.min.js"></script>
-        <script src="./scripts/home.js"></script>
-        <script src="https://apis.google.com/js/api:client.js"></script>
+        <link rel="stylesheet" type='text/css' href="./styles.css">
         
     </head>
     
-    <body ng-controller="MainController" style="height: 100%;">
-        
-        <a class="btn btn-primary" href="dashboard/">Go To Dashboard</a>
+    <body>
+        <div id="section1">
+            <div id="sub-section1">
+                <div id="header">
+                    <span class="helper"></span><img src="./resources/logo-landing.svg">
+                    <span>BLOG</span>
+                </div>
+                <div id="content">
+                    <div id="baby-sitter">
+                    </div>
+                    <div id="main-content">
+                        <div id="main-content-text">Read, Revise and Remember Current Affairs like never before.</div>
+                        <div style="height: 70px;"></div>
+                        <a href="/dashboard" style="text-decoration: none;">
+                            <div class="button">
+                                Start Now
+                                <img src="./resources/right.svg" style="margin-left: 6px; margin-top: 6px;">
+                            </div>
+                        </a>
+                    </div>
+                    <div id="screenshots">
+                        <img src="./resources/sample-news.svg" style="opacity: 0.33; position: absolute; top: 200px; left: 0px;">
+                        <img src="./resources/sample-news.svg" style="opacity: 0.8; position: absolute; top: 150px; left: 30px; z-index: 50;">
+                        <img src="./resources/sample-news.svg" style="opacity: 0.33; position: absolute; top: 200px; left: 60px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="section2">
+            <div id="sub-section2">
+                <div id="img-container">
+                    <img src="./resources/mobilePicBitmap.png" style="position: absolute; bottom: 0px; left: 0px;">
+                </div>
+                <div id="app-content">
+                    <div style="height: 48px;"></div>
+                    <div style="font-family: 'robLight'; color: white; font-size: 20px;"> Continue your preparations on the go !</div>
+                    <div style="height: 24px;"></div>
+                    <div style="font-family: 'robReg'; color: #9b9b9b; font-size: 16px;"> Continue your preparations on the go !</div>
+                    <div style="height: 24px;"></div>
+                    <img src="./resources/google-play.svg" style="cursor: pointer;">
+                </div>
+            </div>
+        </div>
+        <div id="section3">
+            <div id="sub-section3">
+                <div style="height: 54px; line-height: 54px; border-bottom: 1px solid rgba(151, 151, 151, 0.15); text-align: center;">
+                    <span style="cursor: pointer;">Monthly Digest</span>
+                    <span style="margin-left: 12px; cursor: pointer;">Daily Updates</span>
+                    <span style="margin-left: 12px; cursor: pointer;">Quiz</span>
+                </div>
+                <div style="height: 54px; line-height: 54px; text-align: center;">
+                    <span>Find us on:</span>
+                    <img style="margin-left: 12px; cursor: pointer;" src="./resources/fb-logo.svg">
+                    <img style="margin-left: 12px; cursor: pointer;" src="./resources/google-logo.svg">
+                    <img style="margin-left: 12px; cursor: pointer;" src="./resources/twiiter-logo.svg">
+                </div>
+            </div>
+        </div>
     </body>
 </html>

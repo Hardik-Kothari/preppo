@@ -342,7 +342,6 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
         var prevDateString = dateToString.convert(dt);
         var dateString = dateToString.convert(date);
         $scope.fetchingStatus = 1;
-        console.log("fetchInfo : " + JSON.stringify($scope.fetchInfo));
         $scope.fetchInfo[dateString].isLastDate = false;
         var config = {
             headers: {
@@ -358,16 +357,17 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
                 $scope.fetchingStatus = 3;
             }
             else {
+                console.log("were");
                 $scope.fetchingStatus = 2;
                 for(var i=0; i<response.data.length; i++) {
                     response.data[i]['dateString'] = prevDateString;
                 }
-                if($scope.currentNews == $scope.newsUpdates.length) {
-                    $scope.newsIndexToBeCompared[$scope.visible] = -1;
-                    $scope.visible = ($scope.visible+1)/2;
+                $scope.newsUpdates = $scope.newsUpdates.concat(response.data);
+                
+                if($scope.currentNews == $scope.newsUpdates.length-response.data.length) {
                     $scope.newsIndexToBeCompared[$scope.visible] = $scope.currentNews;
                 }
-                $scope.newsUpdates = $scope.newsUpdates.concat(response.data);
+                
                 $scope.fetchInfo[prevDateString] = {
                     len : response.data.length,
                     total : $scope.fetchInfo[dateString].total + $scope.fetchInfo[dateString].len,
@@ -375,7 +375,7 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
                 };
             }
         }, function errorCallback(response) {
-            $scope.errorDate = date;
+            $scope.errorDate = new Date(date.getTime());
             $scope.fetchingStatus = 0;
         });
     };
@@ -396,7 +396,7 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
         }
     };
     
-    $scope.next = function() {
+    $scope.next = function() {        
         if($scope.isSliding[$scope.visible]) {  
             return;
         }
@@ -406,7 +406,7 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
         else {
             $($scope.ids[$scope.visible]).carousel('next');
             if($scope.currentNews == $scope.fetchInfo[dateToString.convert($scope.currentDate)].total && $scope.fetchInfo[dateToString.convert($scope.currentDate)].isLastDate) {
-                $scope.fetchData($scope.currentDate);
+                $scope.fetchData(new Date($scope.currentDate.getTime()));
             }
             if($scope.currentNews+1 == $scope.fetchInfo[dateToString.convert($scope.currentDate)].total+$scope.fetchInfo[dateToString.convert($scope.currentDate)].len) {
                 $scope.currentDate.setDate($scope.currentDate.getDate() - 1);

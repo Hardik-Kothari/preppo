@@ -22,7 +22,7 @@
                                 <div ng-style="{'background-image': 'url(' + newsUpdate.imageMobile + ')'}" style="width: 100%; height: 100px; background-size: cover; background-position: center; border-radius: 4px 4px 0px 0px;">
                                     <div class="gradient-background" style="height: 100%; width: 100%; border-radius: 2px 2px 0px 0px;">
                                         <div style="height:42px; background-color: rgba(0, 0, 0, 0); border-radius: 2px 2px 0px 0px;"></div>
-                                        <div class="news-heading">{{newsUpdate.content[user.userInfo.lang].heading}} + {{visible}}</div>
+                                        <div class="news-heading">{{newsUpdate.content[user.userInfo.lang].heading}}</div>
                                     </div>
                                 </div>
                                 <div style="width: 100%; height: 280px; overflow-y: scroll; padding: 24px 24px 6px 24px;">
@@ -152,12 +152,16 @@
         });
         $('#needs-focus').focus();
         var scp = angular.element(document.getElementById('news-update-main')).scope();
-        $('.carousel').on('slide.bs.carousel', function () {
+        $('#carousel-0').on('slide.bs.carousel', function () {
             scp.isSliding[0] = true;
+        });
+        $('#carousel-0').on('slid.bs.carousel', function () {
+            scp.isSliding[0] = false;
+        });
+        $('#carousel-1').on('slide.bs.carousel', function () {
             scp.isSliding[1] = true;
         });
-        $('.carousel').on('slid.bs.carousel', function () {
-            scp.isSliding[0] = false;
+        $('#carousel-1').on('slid.bs.carousel', function () {
             scp.isSliding[1] = false;
         });
     });

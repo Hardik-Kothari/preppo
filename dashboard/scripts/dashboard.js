@@ -27,7 +27,7 @@ preppo.run(function ($rootScope, $timeout) {
     });
 });
 
-preppo.constant('apiDomainName', 'https://dev.api.preppo.in/v1/app');
+preppo.constant('apiDomainName', 'https://prod.api.preppo.in/v1/app');
 
 preppo.constant('categories', ['Current Affairs', 'Mock Test', 'Practice Test']);
 
@@ -252,16 +252,19 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
 preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http', 'dateToString', 'apiDomainName', '$location', function($scope, userService, $http, dateToString, apiDomainName, $location) {
     $http.defaults.withCredentials = true;
     $scope.dateToString = dateToString;
-    $scope.currentDate = new Date('2016-02-03');
+    $scope.currentDate = new Date('2016-03-03');
     $scope.newsUpdates = [];
     $scope.fetchInfo = {};
     $scope.currentNews = 0;
     $scope.fetchingStatus = 1; // 0-failed, 1-fetching, 2-fetched, 3-finished. Used for showing last slide.
-    $scope.newsIndexToBeCompared = 0;
+    $scope.newsIndexToBeCompared = [0, -1];
+    $scope.visible = 0;
     $scope.firstDate = new Date();
     $scope.user = userService;
-    $scope.isSliding = false;
+    $scope.isSliding = [false, false];
     $scope.errorDate = new Date();
+    $scope.arr = [0, 1];
+    $scope.ids = ['#carousel-0', '#carousel-1'];
     
     function start() {
         var dt = new Date($scope.currentDate.getTime());
@@ -307,7 +310,7 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
                             isLastDate : true
                         };
                         $scope.firstDate = new Date(dt.getTime());
-                        $scope.newsIndexToBeCompared = $scope.currentNews;
+                        $scope.newsIndexToBeCompared[$scope.visible] = $scope.currentNews;
                     }
                 }, function errorCallback(response) {
                     $scope.fetchingStatus = 4;
@@ -325,7 +328,7 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
                     isLastDate : true
                 };
                 $scope.firstDate = new Date($scope.currentDate.getTime());
-                $scope.newsIndexToBeCompared = $scope.currentNews;
+                $scope.newsIndexToBeCompared[$scope.visible] = $scope.currentNews;
             }
         }, function errorCallback(response) {
             $scope.fetchingStatus = 4;
@@ -359,8 +362,9 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
                     response.data[i]['dateString'] = prevDateString;
                 }
                 if($scope.currentNews == $scope.newsUpdates.length) {
-                    $('#carousel-example-generic').find('.active').removeClass('active');
-                    $scope.newsIndexToBeCompared = $scope.currentNews;
+                    $scope.newsIndexToBeCompared[$scope.visible] = -1;
+                    $scope.visible = ($scope.visible+1)/2;
+                    $scope.newsIndexToBeCompared[$scope.visible] = $scope.currentNews;
                 }
                 $scope.newsUpdates = $scope.newsUpdates.concat(response.data);
                 $scope.fetchInfo[prevDateString] = {
@@ -376,14 +380,17 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
     };
     
     $scope.prev = function() {
-        if($scope.isSliding) {
+        if($scope.isSliding[$scope.visible]) {
+            console.log('lol');
             return;
         }
         if($scope.currentNews == 0) {
             // Kuch nhi hoga bhai. bas kar
+            console.log('lol1');
         }
         else {
-            $('.carousel').carousel('prev');
+            console.log('lol2');
+            $($scope.ids[$scope.visible]).carousel('prev');
             if($scope.currentNews == $scope.newsUpdates.length || $scope.currentNews == $scope.fetchInfo[dateToString.convert($scope.currentDate)].total) {
                 $scope.currentDate.setDate($scope.currentDate.getDate() + 1);            
             }
@@ -392,14 +399,17 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
     };
     
     $scope.next = function() {
-        if($scope.isSliding) {
+        if($scope.isSliding[$scope.visible]) {
+            console.log('lols');
             return;
         }
         if($scope.currentNews == $scope.newsUpdates.length) {
             // Kuch nhi hoga bhai. bas kar
+            console.log('lols1');
         }
         else {
-            $('.carousel').carousel('next');
+            console.log('lols2');
+            $($scope.ids[$scope.visible]).carousel('next');
             if($scope.currentNews == $scope.fetchInfo[dateToString.convert($scope.currentDate)].total && $scope.fetchInfo[dateToString.convert($scope.currentDate)].isLastDate) {
                 $scope.fetchData($scope.currentDate);
             }
@@ -428,7 +438,9 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
         //var clone = $scope.newsUpdates.slice(0);
         //$scope.newsUpdates = [];
         $scope.currentNews = 0;
-        $scope.newsIndexToBeCompared = 0;
+        $scope.newsIndexToBeCompared[$scope.visible] = -1;
+        $scope.visible = ($scope.visible+1)%2;
+        $scope.newsIndexToBeCompared[$scope.visible] = 0;
         $scope.currentDate = $scope.firstDate;
         //$scope.newsUpdates = clone;
     };
@@ -443,9 +455,7 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
     };
     
     $scope.getDateObj = function(str) {
-        console.log("here : " + str);
         var dt = new Date(str);
-        console.log("dt : " + dt);
         return dt;
     };
     

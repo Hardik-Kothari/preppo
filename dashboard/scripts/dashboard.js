@@ -491,7 +491,7 @@ preppo.controller('CAMonthlyDigestController', ['$scope', 'userService', '$http'
 }]);
 
 preppo.controller('CAQuizHomeController', ['$scope', 'userService', '$http', 'dateToString', '$location', 'apiDomainName', 'quizService', function($scope, userService, $http, dateToString, $location, apiDomainName, quizService) {
-    $scope.fetchLimit = 3;
+    $scope.fetchLimit = 20;
     $scope.quizzes = [];
     $scope.belowDataStatus = 0;     // 1-pending data 2-fetching data 3-fetched data. makes sense only when quizzes.length>0
     $scope.isLoading = false;
@@ -543,6 +543,7 @@ preppo.controller('CAQuizHomeController', ['$scope', 'userService', '$http', 'da
         var url = apiDomainName + "/news/quiz";
         $http.get(url, config).then(function successCallback(response) {
             var quizzes = response.data;
+            console.log("quiz : " + JSON.stringify(quizzes));
             if(quizzes.length < $scope.fetchLimit) {
                 $scope.belowDataStatus = 3;
             }
@@ -563,6 +564,7 @@ preppo.controller('CAQuizHomeController', ['$scope', 'userService', '$http', 'da
                     break;
                 }
             }
+            console.log("quiz : " + JSON.stringify(quizzes));
             $scope.quizzes = $scope.quizzes.concat(quizzes);
         }, function errorCallback(response) {
             $scope.belowDataStatus = 1;

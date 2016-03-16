@@ -267,7 +267,11 @@ a {
     height: 75px;
     line-height: 75px;
     float: left;
-    vertical-align: bottom;
+}
+
+.quiz-card .icon > svg {
+    vertical-align: middle;
+    display: inline-block;
 }
 
 .quiz-card .right-chevron {

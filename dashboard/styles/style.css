@@ -91,6 +91,10 @@ a {
     height: 24px;
 }
 
+.ceiling-space {
+    height: 40px;
+}
+
 .sub-navbar {
     position: absolute;
     top: 50px;
@@ -146,7 +150,7 @@ a {
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
-    padding: 66px 0px 0px 12px;
+    padding: 50px 0px 0px 12px;
     width: 100%;
 }
 
@@ -509,6 +513,12 @@ a {
     -moz-osx-font-smoothing: grayscale;
 }
 
+.blank-space {
+    height:42px;
+    background-color: rgba(0, 0, 0, 0);
+    border-radius: 2px 2px 0px 0px;
+}
+
 #bottom-button-container {
     position: absolute;
     bottom: 0px;
@@ -634,12 +644,60 @@ a {
     .top-space {
         height: 0px;
     }
+    .ceiling-space {
+        height: 0px;
+    }
+
     #news-update-main {
         height: -moz-calc(100% - 50px);
         height: -webkit-calc(100% - 50px);
         height: -o-calc(100% - 50px);
         height: calc(100% - 50px);
         overflow: auto;
+    }
+    #quiz-main {
+        padding-top: 94px;
+        height: -moz-calc(100% - 50px);
+        height: -webkit-calc(100% - 50px);
+        height: -o-calc(100% - 50px);
+        height: calc(100% - 50px);
+        overflow: auto;
+    }
+    .option-label {
+        height: 24px;
+        width: 24px;
+        font-size: 14px;
+        line-height: 24px;
+    }
+    .question-card {
+        line-height: 20px;
+        font-size: 15px;
+        padding: 12px 12px;
+    }
+    .option-card {
+        padding: 12px 6px;
+    }
+    .option-content {
+        line-height: 24px;
+        font-size: 15px;
+    }
+    .news-heading {
+        height:20px;
+        padding: 0px 12px 0px 12px;
+        line-height: 20px;
+        font-size: 17px;
+    }
+    .news-content {
+        padding: 12px 12px 6px 12px;
+        height: 240px;
+    }
+    .news-points {
+        line-height: 18px;
+        font-size: 13px;
+        margin-bottom: 14px;
+    }
+    .blank-space {
+        height:24px;
     }
 }
 

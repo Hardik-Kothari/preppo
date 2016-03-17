@@ -28,12 +28,12 @@
 
                     <div class="option-card" ng-repeat="option in questionData.options[user.userInfo.lang] track by $index" ng-click="checkAnswer($index)" ng-class="{ 'correct-option': attempted && $index==questionData.correctAnswer[user.userInfo.lang], 'incorrect-option': attempted && $index==clickedIndex && $index!=questionData.correctAnswer[user.userInfo.lang]}">
                         <div class="row" style="margin: 0px;">
-                            <div class="col-xs-2 col-sm-1" style="padding: 0px 6px;">
+                            <div class="col-xs-1" style="padding: 0px 6px;">
                                 <div class="option-label" ng-show=" !attempted || ( attempted && $index!=clickedIndex && $index!=questionData.correctAnswer[user.userInfo.lang]) ">{{optionLabels[$index]}}</div>
                                 <div class="option-label" style="background-color: #1daf1c;" ng-show=" attempted && $index==questionData.correctAnswer[user.userInfo.lang] "><span class="glyphicon glyphicon-ok"></span></div>
                                 <div class="option-label" style="background-color: #ea5a5a;" ng-show=" attempted && $index==clickedIndex && $index!=questionData.correctAnswer[user.userInfo.lang] "><span class="glyphicon glyphicon-remove"></span></div>
                             </div>        
-                            <div class="col-xs-10 col-sm-11 option-content">
+                            <div class="col-xs-11 option-content">
                                 <div>{{option}}</div>
                                 <div class="description-style" ng-if=" $index == questionData.correctAnswer[user.userInfo.lang] &&  questionData.solution[user.userInfo.lang].trim() != '' " ng-show="attempted">
                                     <b>Description: </b>{{questionData.solution[user.userInfo.lang]}}

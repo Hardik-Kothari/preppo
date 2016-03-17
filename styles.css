@@ -115,6 +115,10 @@ html, body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+.button:hover {
+    border: 1px solid #424242;
+}
+
 #screenshots {
     height: 100%;
     position: relative;

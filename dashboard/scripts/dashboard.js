@@ -31,7 +31,7 @@ preppo.constant('apiDomainName', 'https://prod.api.preppo.in/v1/app');
 
 preppo.constant('categories', ['Current Affairs', 'Mock Test', 'Practice Test']);
 
-preppo.constant('subCategories', {'Current Affairs': ['Daily Updates', 'Monthly Digest', 'Quiz'], 'Mock Test': [], 'Practice Test': [] });
+preppo.constant('subCategories', {'Current Affairs': ['Daily Updates', 'Quiz', 'Monthly Digest'], 'Mock Test': [], 'Practice Test': [] });
 
 preppo.factory('viewingLang', function() {
     var obj = {
@@ -175,76 +175,132 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
         }
     };
     
+    function fblogin(response) {
+        var data = {
+            fbToken: response.authResponse.accessToken,
+        };
+        var config = {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        };
+        var url = apiDomainName + '/auth/login';
+        $http.post(url, data, config).then(function successCallback(response) {
+            var data = response.data;
+            var usr = data['user'];
+            userService.setUserInfoAndCookie(data['x-session-token'], usr.sharedOnFb?true: false, usr.lang?usr.lang:'english');
+            if(!usr.sharedOnFb) {
+                /*
+                FB.ui({
+                    method: 'share',
+                    href: 'http://dev.preppo.in',
+                }, function(response){
+                    if(response['post_id']) {
+                        var dt = {
+                            sharedOnFb: true
+                        };
+                        var config = {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'x-session-token': data['x-session-token']
+                            }
+                        };
+                        var url = apiDomainName + '/users/me';
+                        $http.put(url, dt, config).then(function successCallback(response) {
+                            $('#shareModal').modal('hide');
+                            userService.setUserInfoAndCookie(data['x-session-token'], true, usr.lang?usr.lang:'english');
+                            $scope.goTo('Monthly Digest');
+                        }, function errorCallback(response){
+                            console.log('error : ' + JSON.stringify(response));
+                        }); 
+                    }
+                    else {
+                        //
+                    }
+                });
+                */
+                FB.ui({
+                    method: 'feed',
+                    link: 'http://dev.preppo.in',
+                    caption: 'An example caption'
+                }, function(response){
+                    console.log("response : " + response);
+                    if(response['post_id']) {
+                        var dt = {
+                            sharedOnFb: true
+                        };
+                        var config = {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'x-session-token': data['x-session-token']
+                            }
+                        };
+                        var url = apiDomainName + '/users/me';
+                        $http.put(url, dt, config).then(function successCallback(response) {
+                            $('#shareModal').modal('hide');
+                            userService.setUserInfoAndCookie(data['x-session-token'], true, usr.lang?usr.lang:'english');
+                            $scope.goTo('Monthly Digest');
+                        }, function errorCallback(response){
+                            console.log('error : ' + JSON.stringify(response));
+                        }); 
+                    }
+                    else {
+                        //
+                    }
+                });
+            }
+            else {
+                $('#shareModal').modal('hide');
+                $scope.goTo('Monthly Digest');
+            }
+        }, function errorCallback(response){
+            if(response.data.error == "INVALID_TOKEN") {
+                alert("Invalid token.");
+            }
+            else {
+                console.log('error : ' + JSON.stringify(response));
+            } 
+        });
+    }
+    
     $scope.fb = function() {
+    /*    FB.getLoginStatus(function(response) {
+            if (response.status === 'connected') {
+                console.log("jgd");
+                fblogin();
+            } else {
+                FB.login(function(response) {
+                    if (response.status === 'connected') {
+                        // Logged into your app and Facebook.
+                        console.log("jgd login");
+                        fblogin();
+                    } else if (response.status === 'not_authorized') {
+                        // The person is logged into Facebook, but not your app.
+                        console.log("not_authorized")
+
+                    } else {
+                        // The person is not logged into Facebook, so we're not sure if
+                        // they are logged into this app or not.
+                        console.log("else")
+                    }
+                }, {scope: 'public_profile, email, user_friends'});
+            }
+        });*/
         FB.login(function(response) {
             if (response.status === 'connected') {
                 // Logged into your app and Facebook.
-                console.log("connected")
-                console.log(response.authResponse.accessToken);
-                var data = {
-                    fbToken: response.authResponse.accessToken,
-                };
-                var config = {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                };
-                var url = apiDomainName + '/auth/login';
-                $http.post(url, data, config).then(function successCallback(response) {
-                    var data = response.data;
-                    var usr = data['user'];
-                    userService.setUserInfoAndCookie(data['x-session-token'], usr.sharedOnFb?true: false, usr.lang?usr.lang:'english');
-                    //userService.setUserInfoFromCookie();
-                    if(!usr.sharedOnFb) {
-                        FB.ui({
-                            method: 'share',
-                            href: 'http://onequestiondaily.preppo.in',
-                        }, function(response){
-                            if(response['post_id']) {
-                                var data = {
-                                    sharedOnFb: true
-                                };
-                                var config = {
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'x-session-token': data['x-session-token']
-                                    }
-                                };
-                                var url = apiDomainName + '/users/me';
-                                $http.put(url, data, config).then(function successCallback(response) {
-                                    $('#shareModal').modal('hide');
-                                    $scope.goTo('Monthly Digest');
-                                }, function errorCallback(response){
-                                    console.log('error : ' + JSON.stringify(response));
-                                }); 
-                            }
-                            else {
-                                //
-                            }
-                        });
-                    }
-                    else {
-                        $('#shareModal').modal('hide');
-                        $scope.goTo('Monthly Digest');
-                    }
-                }, function errorCallback(response){
-                    if(response.data.error == "INVALID_TOKEN") {
-                        alert("Invalid token.");
-                    }
-                    else {
-                        console.log('error : ' + JSON.stringify(response));
-                    } 
-                });
+                console.log("jgd login");
+                fblogin(response);
             } else if (response.status === 'not_authorized') {
                 // The person is logged into Facebook, but not your app.
                 console.log("not_authorized")
-                
+
             } else {
                 // The person is not logged into Facebook, so we're not sure if
                 // they are logged into this app or not.
                 console.log("else")
             }
-        }, {scope: 'public_profile, email, user_friends, publish_actions'});
+        }, {scope: 'public_profile, email, user_friends'});
     };
     
 }]);
@@ -273,10 +329,6 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
         var dateString = dateToString.convert($scope.currentDate);
         
         var config = {
-            headers: {
-                'Content-Type' : 'application/json',
-                'x-session-token': "VJ-Zna13gVJg-b3Ty3g" //userService.userInfo.sessionToken
-            },
             params: {
                 'date': dateString
             }
@@ -285,10 +337,6 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
         $http.get(url, config).then(function successCallback(response) {
             if(response.data.length == 0) {
                 var config = {
-                    headers: {
-                        'Content-Type' : 'application/json',
-                        'x-session-token': "VJ-Zna13gVJg-b3Ty3g" //userService.userInfo.sessionToken
-                    },
                     params: {
                         'date': prevDateString
                     }
@@ -344,9 +392,6 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
         $scope.fetchingStatus = 1;
         $scope.fetchInfo[dateString].isLastDate = false;
         var config = {
-            headers: {
-                'Content-Type' : 'application/json'
-            },
             params: {
                 'date': prevDateString,
             }
@@ -357,7 +402,6 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
                 $scope.fetchingStatus = 3;
             }
             else {
-                console.log("were");
                 $scope.fetchingStatus = 2;
                 for(var i=0; i<response.data.length; i++) {
                     response.data[i]['dateString'] = prevDateString;
@@ -470,7 +514,6 @@ preppo.controller('CAMonthlyDigestController', ['$scope', 'userService', '$http'
     function fetchData() {
         var config = {
             headers: {
-                'Content-Type' : 'application/json',
                 'x-session-token': $scope.user.userInfo.sessionToken
             }
         };
@@ -501,10 +544,6 @@ preppo.controller('CAQuizHomeController', ['$scope', 'userService', '$http', 'da
     
     function fetchData() {
         var config = {
-            headers: {
-                'Content-Type' : 'application/json',
-                'x-session-token': $scope.user.userInfo.sessionToken
-            },
             params: {
                 'limit': $scope.fetchLimit
             }
@@ -531,10 +570,6 @@ preppo.controller('CAQuizHomeController', ['$scope', 'userService', '$http', 'da
         var lastQuiz = $scope.quizzes[$scope.quizzes.length-1];
         var dateString = dateToString.convert(new Date(lastQuiz.publishDate));
         var config = {
-            headers: {
-                'Content-Type' : 'application/json',
-                'x-session-token': $scope.user.userInfo.sessionToken
-            },
             params: {
                 'limit': $scope.fetchLimit,
                 'lt': dateString
@@ -583,10 +618,10 @@ preppo.controller('CAQuizOfficeController', ['$scope', 'userService', '$http', '
     $scope.quiz = quizService.quiz;
     $scope.questions = [];
     $scope.currentQuestionIndex = 1;
-    $scope.showNextButton = false;
+    $scope.attempted = false;
     $scope.correctAnswers = 0;
+    $scope.attemptedQuestions = 0;
     $scope.isLoading = false;
-    $scope.showSummary = false;
     $scope.questionData = {
         statement: {
             english: "",
@@ -609,6 +644,7 @@ preppo.controller('CAQuizOfficeController', ['$scope', 'userService', '$http', '
     $scope.clickedIndex = -1;
     $scope.bottomButtonLabel = "NEXT";
     $scope.user = userService;
+    $scope.isClicked = [false, false, false, false, false];
     
     function resetQuestion() {
         var question = $scope.questions[$scope.currentQuestionIndex - 1];
@@ -654,10 +690,6 @@ preppo.controller('CAQuizOfficeController', ['$scope', 'userService', '$http', '
     function fetchData() {
         $scope.isLoading = true;
         var config = {
-            headers: {
-                'Content-Type' : 'application/json',
-                'x-session-token': $scope.user.userInfo.sessionToken
-            }
         };
         var url = apiDomainName + "/news/quiz/" + $scope.id;
         $http.get(url, config).then(function successCallback(response) {
@@ -671,22 +703,26 @@ preppo.controller('CAQuizOfficeController', ['$scope', 'userService', '$http', '
     fetchData();
     
     $scope.next = function(nextOrFinish) {
-        if(!$scope.showNextButton) {
-            return;
-        }
-        if(nextOrFinish == "NEXT") {
-            $scope.currentQuestionIndex++;
-            $scope.showNextButton = false;
-            $scope.resetQuestion();   
+        if(!$scope.attempted) {
+            $scope.attempted = true;
+            $scope.clickedIndex = -1;
         }
         else {
-            //kya karna hai      
+            if(nextOrFinish == "NEXT") {
+                $scope.currentQuestionIndex++;
+                $scope.attempted = false;
+                $scope.resetQuestion();
+            }
+            else {
+                $('#finishModal').modal('show');
+            }
         }
     };
     
     $scope.checkAnswer = function(index) {
-        if(!$scope.showNextButton) {
-            $scope.showNextButton = true;
+        if(!$scope.attempted) {
+            $scope.attempted = true;
+            $scope.attemptedQuestions++;
             $scope.clickedIndex = index;
             if($scope.questionData.correctAnswer[$scope.user.userInfo.lang] == index) {
                 $scope.correctAnswers++;
@@ -696,6 +732,51 @@ preppo.controller('CAQuizOfficeController', ['$scope', 'userService', '$http', '
     
     $scope.goBack = function() {
         $window.history.back();  
+    };
+    
+    $scope.clicked = function(index) {
+        for(var i=0; i<5; i++) {
+            if(i == index) {
+                $scope.isClicked[i] = true;
+            }
+            else {
+                $scope.isClicked[i] = false;
+            }
+        }
+    };
+    
+    $scope.finishQuiz = function() {
+        var rating = 0;
+        for(var i=0; i<5; i++) {
+            if($scope.isClicked[i]) {
+                rating = 5-i;
+                break;
+            }
+        }
+        
+        $('#finishModal').modal('hide');
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+        $scope.goBack();
+        console.log($scope.quiz._id);
+        
+        if(rating != 0) {
+            var data = {
+                'quizId': $scope.quiz._id,
+                'rating': rating
+            };
+            var config = {
+                headers: {
+                    'Content-Type' : 'application/json'
+                }
+            };
+            var url = apiDomainName + "/extra/ratings/news/quiz";
+            $http.post(url, data, config).then(function successCallback(response) {
+                console.log('lols');
+            }, function errorCallback(response) {
+                console.log('luls');
+            });
+        }
     };
     
 }]);

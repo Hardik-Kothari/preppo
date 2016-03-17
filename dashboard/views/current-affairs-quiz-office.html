@@ -3,11 +3,11 @@
         <div class="navbar-headers" ng-click="$parent.goTo('Daily Updates')">
             DAILY UPDATES
         </div>
-        <div class="navbar-headers" ng-click="$parent.goTo('Monthly Digest')">
-            MONTHLY DIGEST
-        </div>
         <div class="navbar-headers active">
             QUIZ
+        </div>
+        <div class="navbar-headers" ng-click="$parent.goTo('Monthly Digest')">
+            MONTHLY DIGEST
         </div>
     </div>
     <div class="sub-navbar">
@@ -26,16 +26,16 @@
                         {{questionData.statement[user.userInfo.lang]}}
                     </div>
 
-                    <div class="option-card" ng-repeat="option in questionData.options[user.userInfo.lang] track by $index" ng-click="checkAnswer($index)" ng-class="{ 'correct-option': showNextButton && $index==questionData.correctAnswer[user.userInfo.lang], 'incorrect-option': showNextButton && $index==clickedIndex && $index!=questionData.correctAnswer[user.userInfo.lang]}">
+                    <div class="option-card" ng-repeat="option in questionData.options[user.userInfo.lang] track by $index" ng-click="checkAnswer($index)" ng-class="{ 'correct-option': attempted && $index==questionData.correctAnswer[user.userInfo.lang], 'incorrect-option': attempted && $index==clickedIndex && $index!=questionData.correctAnswer[user.userInfo.lang]}">
                         <div class="row" style="margin: 0px;">
                             <div class="col-xs-2 col-sm-1" style="padding: 0px 6px;">
-                                <div class="option-label" ng-show=" !showNextButton || ( showNextButton && $index!=clickedIndex && $index!=questionData.correctAnswer[user.userInfo.lang]) ">{{optionLabels[$index]}}</div>
-                                <div class="option-label" style="background-color: #1daf1c;" ng-show=" showNextButton && $index==questionData.correctAnswer[user.userInfo.lang] "><span class="glyphicon glyphicon-ok"></span></div>
-                                <div class="option-label" style="background-color: #ea5a5a;" ng-show=" showNextButton && $index==clickedIndex && $index!=questionData.correctAnswer[user.userInfo.lang] "><span class="glyphicon glyphicon-remove"></span></div>
+                                <div class="option-label" ng-show=" !attempted || ( attempted && $index!=clickedIndex && $index!=questionData.correctAnswer[user.userInfo.lang]) ">{{optionLabels[$index]}}</div>
+                                <div class="option-label" style="background-color: #1daf1c;" ng-show=" attempted && $index==questionData.correctAnswer[user.userInfo.lang] "><span class="glyphicon glyphicon-ok"></span></div>
+                                <div class="option-label" style="background-color: #ea5a5a;" ng-show=" attempted && $index==clickedIndex && $index!=questionData.correctAnswer[user.userInfo.lang] "><span class="glyphicon glyphicon-remove"></span></div>
                             </div>        
                             <div class="col-xs-10 col-sm-11 option-content">
                                 <div>{{option}}</div>
-                                <div class="description-style" ng-if=" $index == questionData.correctAnswer[user.userInfo.lang] &&  questionData.solution[user.userInfo.lang].trim() != '' " ng-show="showNextButton">
+                                <div class="description-style" ng-if=" $index == questionData.correctAnswer[user.userInfo.lang] &&  questionData.solution[user.userInfo.lang].trim() != '' " ng-show="attempted">
                                     <b>Description: </b>{{questionData.solution[user.userInfo.lang]}}
                                 </div>
                             </div>
@@ -91,8 +91,49 @@
             </div>
         </div>
     </div>
-    <div class="next-button" ng-class="{ 'show-next-button': showNextButton }" ng-click="next(bottomButtonLabel)">
+    <div class="next-button" ng-click="next(bottomButtonLabel)">
         {{bottomButtonLabel}}
         <img style="margin-left: 12px;" src="./resources/next.svg">
     </div>
+    <!-- Share dialog box opens -->
+    <div class="modal fade" id="finishModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog my-modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 2px; background-color: #ffffff; padding: 24px;">
+                <div class="finish-modal-text" style="text-align: center;">
+                    <span>{{attemptedQuestions}}</span>
+                    <br>
+                    <span>Total attempted</span>
+                </div>
+                <div style="height: 12px;"></div>
+                <div style="padding: 0px 24px; border-bottom: 1px solid #E0E0E0;"></div>
+                <div style="float: left; border-right: 1px solid #E0E0E0; text-align: center; width: 50%; margin: 18px 0px;">
+                    <div style="height: 28px; width: 28px; background-color: #1daf1c; color: white; font-size: 15px; line-height: 28px; border-radius: 50%; margin: 0 auto;"><span class="glyphicon glyphicon-ok"></span></div>
+                    <div style="height: 12px;"></div>
+                    <div class="finish-modal-text" style="margin: 0 auto;">{{correctAnswers}}</div>
+                    <div class="finish-modal-text" style="margin: 0 auto;">Correct</div>
+                </div>
+                <div style="float: left; text-align: center; width: 50%; margin: 18px 0px;">
+                    <div style="height: 28px; width: 28px; background-color: #ea5a5a; color: white; font-size: 15px; line-height: 28px; border-radius: 50%; margin: 0 auto;"><span class="glyphicon glyphicon-remove"></span></div>
+                    <div style="height: 12px;"></div>
+                    <div class="finish-modal-text" style="margin: 0 auto;">{{attemptedQuestions - correctAnswers}}</div>
+                    <div class="finish-modal-text" style="margin: 0 auto;">Wrong</div>
+                </div>
+                <div style="clear: both;"></div>
+                <div style="padding: 0px 24px; border-bottom: 1px solid #E0E0E0;"></div>
+                <div style="height: 18px;"></div>
+                <div class="finish-modal-text" style="font-size: 16px; color: #424242; text-align: center;">Rate Quiz</div>
+                <div style="height: 24px;"></div>
+                <div class="rating">
+                    <span ng-repeat="star in isClicked track by $index" ng-class="{'clicked': star}" ng-click="clicked($index)">&#x2605;</span>
+                </div>
+                <div style="height: 18px;"></div>
+                <div style="padding: 0px 24px; border-bottom: 1px solid #E0E0E0;"></div>
+                <div style="height: 18px;"></div>
+                <div style="height: 40px;">
+                    <div class="finish-modal-text" style="margin: 0 auto; height: 40px; width: 160px; line-height: 40px; font-size: 16px; color: white; letter-spacing: 2px; text-align: center; background-color: #3B5998; border-radius: 3px; cursor: pointer;" ng-click="finishQuiz()">FINISH</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Share dialog box ends-->
 </div>

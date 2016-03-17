@@ -20,7 +20,7 @@ html, body {
 }
 
 #section1 {
-    height: 100%;
+    height: 90%;
     background-image: url('./resources/apple-iphone-books-desk.png');
     background-position: center;
     background-size: cover;
@@ -54,11 +54,13 @@ html, body {
     vertical-align: middle;
 }
 
-#header span {
+#header a {
     float: right;
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.5);
 }
 
-#header span:hover {
+#header a:hover {
     cursor: pointer;
     color: rgba(255, 255, 255, 1.0);
 }
@@ -66,6 +68,12 @@ html, body {
 #content {
     height: 100%;
     overflow: hidden;
+}
+
+#main-subcontent {
+    position: absolute;
+    bottom: 150px;
+    left: 0px;
 }
 
 #baby-sitter {
@@ -78,9 +86,7 @@ html, body {
     height: 100%;
     width: 30%;
     float: left;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    position: relative
 }
 
 #main-content-text {
@@ -91,6 +97,7 @@ html, body {
     letter-spacing: 0.8px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    margin-bottom: 70px;
 }
 
 .button {
@@ -112,7 +119,7 @@ html, body {
     height: 100%;
     position: relative;
     float: left;
-    width: 40%;
+    width: 25%;
     overflow: hidden;
 }
 
@@ -157,11 +164,6 @@ html, body {
 
 #sub-section3 {
     width: 300px;
-    color: #9B9B9B;
-    font-size: 12px;
-    font-family: 'robReg';
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     margin: 0 auto;
 }
 
@@ -171,7 +173,34 @@ html, body {
     vertical-align: middle;
 }
 
+.row {
+    height: 54px;
+    line-height: 54px;
+    border-bottom: 1px solid rgba(151, 151, 151, 0.15);
+    text-align: center;
+    color: #9B9B9B;
+    font-size: 12px;
+    font-family: 'robReg';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.row > span,
+.row > img {
+    margin-left: 12px;
+    cursor: pointer;
+}
+
+.row > span:hover,
+.row > img:hover {
+    color: #ffffff;
+}
+
+
 @media (max-width: 768px) {
+    #section1 {
+        height: 100%;
+    }
     #header {
         width: 90%;
         margin: 0 auto;
@@ -184,9 +213,13 @@ html, body {
         margin: auto;
         width: 80%;
     }
+    #main-subcontent {
+        bottom: 100px;
+    }
     #main-content-text {
         font-size: 30px;
         line-height: 36px;
+        margin-bottom: 40px;
     }
     #baby-sitter {
         display: none;

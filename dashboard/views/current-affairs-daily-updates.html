@@ -3,11 +3,11 @@
         <div class="navbar-headers active">
             DAILY UPDATES
         </div>
-        <div class="navbar-headers" ng-click="$parent.travel('Monthly Digest')">
-            MONTHLY DIGEST
-        </div>
         <div class="navbar-headers" ng-click="$parent.goTo('Quiz')">
             QUIZ
+        </div>
+        <div class="navbar-headers" ng-click="$parent.travel('Monthly Digest')">
+            MONTHLY DIGEST
         </div>
     </div>
     <div id="news-update-main" style="z-index: 200;">
@@ -25,7 +25,7 @@
                                         <div class="news-heading">{{newsUpdate.content[user.userInfo.lang].heading}}</div>
                                     </div>
                                 </div>
-                                <div style="width: 100%; height: 280px; overflow-y: scroll; padding: 24px 24px 6px 24px;">
+                                <div style="width: 100%; height: 280px; overflow-y: auto; padding: 24px 24px 6px 24px;">
                                     <p class="news-points" ng-repeat="point in newsUpdate.content[user.userInfo.lang].points track by $index" ng-class="{ 'no-bottom-margin': $index == newsUpdate.content[user.userInfo.lang].points.length-1 }">{{$index+1}}. <span ng-bind-html="prettify(point)"></span></p>
                                 </div>
                                 <div class="news-card-toolbar">

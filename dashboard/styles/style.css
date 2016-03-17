@@ -43,7 +43,7 @@ a {
 }
 
 #major-categories {
-    overflow: scroll;
+    overflow: auto;
 }
 
 .navbar-top {
@@ -125,7 +125,7 @@ a {
 .template-container {
     height: 100%;
     position: relative;
-    overflow: scroll;
+    overflow: auto;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -383,6 +383,7 @@ a {
 #quiz-main {
     padding-top: 144px;
     width: 100%;
+    z-index: 100;
 }
 
 .option-card {
@@ -445,6 +446,7 @@ a {
 
 .option-card:hover {
     background-color: #f5f5f5;
+    border-left: 3px solid #f5f5f5;
 }
 
 .all-quizzes-breadcrumb {
@@ -606,6 +608,10 @@ a {
         width: 90%;
         margin: 30px auto;
     }
+    .navbar-headers {
+        letter-spacing: 0px;
+        margin: 0px;
+    }
 }
 
 .form-button {
@@ -693,8 +699,8 @@ a {
     text-align: center;
     color: #ffffff;
     letter-spacing: 2px;
-    cursor: not-allowed;
-    background-color: #cacaca;
+    cursor: pointer;
+    background-color: #1daf1c;
     position: absolute;
     bottom: 0px;
     left: 0px;
@@ -702,6 +708,7 @@ a {
     font-family: 'robMed';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    z-index: 200;
 }
 
 .item-no-transition {
@@ -718,10 +725,42 @@ a {
     -moz-transition-property: .6s ease-in-out left;
 }
 
-.show-next-button {
-    cursor: pointer;
-    background-color: #1daf1c;
+
+.finish-modal-text {
+    font-size: 24px;
+    font-family: 'robMed';
+    color: #212121;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
+
+/********* Stars **********************/
+
+.rating {
+    unicode-bidi: bidi-override;
+    direction: rtl;
+    text-align: center;
+    font-size: 36px;
+}
+
+.rating > span {
+    color: #424242;
+    cursor: pointer;
+    padding: 0px 4px;
+}
+
+.rating > span:hover,
+.rating > span:hover ~ span {
+    color: #F5A623;
+}
+
+.rating >.clicked,
+.rating > .clicked ~ span {
+    color: #F5A623;
+}
+
+/****************************************************/
+
 
 
 

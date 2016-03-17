@@ -87,6 +87,10 @@ a {
     cursor: pointer;
 }
 
+.top-space {
+    height: 24px;
+}
+
 .sub-navbar {
     position: absolute;
     top: 50px;
@@ -99,6 +103,13 @@ a {
     box-sizing: border-box;
     line-height: 40px;
     letter-spacing: 1px;
+}
+
+.news-content {
+    width: 100%;
+    height: 280px;
+    overflow-y: auto;
+    padding: 24px 24px 6px 24px;
 }
 
 .user-greeting {
@@ -468,6 +479,14 @@ a {
     width: 100%;
 }
 
+.news-card-error {
+    font-size:16px;
+    font-family:'robReg';
+    color: #4b4b4b;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
 .batti-message {
     font-size:13px;
     font-family:'robReg';
@@ -611,6 +630,16 @@ a {
     .navbar-headers {
         letter-spacing: 0px;
         margin: 0px;
+    }
+    .top-space {
+        height: 0px;
+    }
+    #news-update-main {
+        height: -moz-calc(100% - 50px);
+        height: -webkit-calc(100% - 50px);
+        height: -o-calc(100% - 50px);
+        height: calc(100% - 50px);
+        overflow: auto;
     }
 }
 

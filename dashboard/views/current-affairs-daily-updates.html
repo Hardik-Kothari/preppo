@@ -47,7 +47,7 @@
                                         <div style="height: 24px; background-color: #ffffff; margin-left: 24px; width: 80%;"></div>
                                     </div>
                                 </div>
-                                <div style="width: 100%; height: 280px; overflow-y: scroll; padding: 30px 24px 6px 24px;">
+                                <div style="width: 100%; height: 280px; overflow-y: auto; padding: 30px 24px 6px 24px;">
                                     <div style="height: 24px; background-color: #f5f5f5; width: 75%; margin-bottom: 18px;"></div>
                                     <div style="height: 24px; background-color: #f5f5f5; width: 90%; margin-bottom: 18px;"></div>
                                     <div style="height: 24px; background-color: #f5f5f5; width: 60%; margin-bottom: 18px;"></div>
@@ -84,7 +84,7 @@
                                         <div class="news-heading">{{newsUpdate.content[user.userInfo.lang].heading}}</div>
                                     </div>
                                 </div>
-                                <div style="width: 100%; height: 280px; overflow-y: scroll; padding: 24px 24px 6px 24px;">
+                                <div style="width: 100%; height: 280px; overflow-y: auto; padding: 24px 24px 6px 24px;">
                                     <p class="news-points" ng-repeat="point in newsUpdate.content[user.userInfo.lang].points track by $index" ng-class="{ 'no-bottom-margin': $index == newsUpdate.content[user.userInfo.lang].points.length-1 }">{{$index+1}}. <span ng-bind-html="prettify(point)"></span></p>
                                 </div>
                                 <div class="news-card-toolbar">
@@ -106,7 +106,7 @@
                                         <div style="height: 24px; background-color: #ffffff; margin-left: 24px; width: 80%;"></div>
                                     </div>
                                 </div>
-                                <div style="width: 100%; height: 280px; overflow-y: scroll; padding: 30px 24px 6px 24px;">
+                                <div style="width: 100%; height: 280px; overflow-y: auto; padding: 30px 24px 6px 24px;">
                                     <div style="height: 24px; background-color: #f5f5f5; width: 75%; margin-bottom: 18px;"></div>
                                     <div style="height: 24px; background-color: #f5f5f5; width: 90%; margin-bottom: 18px;"></div>
                                     <div style="height: 24px; background-color: #f5f5f5; width: 60%; margin-bottom: 18px;"></div>

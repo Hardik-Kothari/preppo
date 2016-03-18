@@ -1,13 +1,19 @@
 <div id="needs-focus" class="template-container" ng-keydown="keyPressed($event)" tabindex="0">
     <div class="navbar-top">
-        <div class="navbar-headers active">
+        <div class="navbar-headers active mobile-hide">
             DAILY UPDATES
+        </div>
+        <div class="navbar-headers active mobile-display">
+            UPDATES
         </div>
         <div class="navbar-headers" ng-click="$parent.goTo('Quiz')">
             QUIZ
         </div>
-        <div class="navbar-headers" ng-click="$parent.travel('Monthly Digest')">
+        <div class="navbar-headers mobile-hide" ng-click="$parent.travel('Monthly Digest')">
             MONTHLY DIGEST
+        </div>
+        <div class="navbar-headers mobile-display" ng-click="$parent.travel('Monthly Digest')">
+            DIGEST
         </div>
     </div>
     <div id="news-update-main" style="z-index: 200;">

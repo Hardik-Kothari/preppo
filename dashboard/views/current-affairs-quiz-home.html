@@ -1,13 +1,19 @@
 <div class="template-container">
     <div class="navbar-top">
-        <div class="navbar-headers" ng-click="$parent.goTo('Daily Updates')">
+        <div class="navbar-headers mobile-hide" ng-click="$parent.goTo('Daily Updates')">
             DAILY UPDATES
+        </div>
+        <div class="navbar-headers mobile-display" ng-click="$parent.goTo('Daily Updates')">
+            UPDATES
         </div>
         <div class="navbar-headers active">
             QUIZ
         </div>
-        <div class="navbar-headers" ng-click="$parent.travel('Monthly Digest')">
+        <div class="navbar-headers mobile-hide" ng-click="$parent.travel('Monthly Digest')">
             MONTHLY DIGEST
+        </div>
+        <div class="navbar-headers mobile-display" ng-click="$parent.travel('Monthly Digest')">
+            DIGEST
         </div>
     </div>
     <div id="all-quizzes">

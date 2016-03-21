@@ -15,6 +15,13 @@
         <div class="navbar-headers mobile-display" ng-click="$parent.travel('Monthly Digest')">
             DIGEST
         </div>
+        <div class="mobile-hide lang-font" style="float: right; padding: 6px 12px 6px 3px;">हिंदी</div>
+        <div class="mobile-hide" style="float: right; padding: 6px 12px;">
+            <div class="toggle-button" ng-click="changeLang()">
+                <button ng-class="{ 'left': user.userInfo.lang == 'english', 'right': user.userInfo.lang == 'hindi' }"></button>
+            </div>
+        </div>
+        <div class="mobile-hide lang-font" style="float: right; padding: 6px 0px;">Eng</div>
     </div>
     <div id="news-update-main" style="z-index: 200;">
         <div class="top-space"></div>
@@ -136,6 +143,9 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div id="instructions" class="mobile-hide">
+        Use <span style="margin-left: 6px; margin-right: 6px;" class="glyphicon glyphicon-arrow-left"></span> <span style="margin-right: 6px;" class="glyphicon glyphicon-arrow-right"></span> keys on your keyboard to navigate
     </div>
     <div id="bottom-button-container" style="z-index: 400;">
         <div style="background-color: #cacaca;" ng-click="prev();">

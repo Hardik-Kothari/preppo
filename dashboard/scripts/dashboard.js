@@ -54,8 +54,7 @@ preppo.factory('userService', ['$http', 'apiDomainName', '$cookies', function($h
     
     function setUserInfoFromCookie() {
         userInfo.sessionToken = $cookies.get('sessionToken');
-        userInfo.sharedOnFb = ($cookies.get('sharedOnFb')=="false")?false:true;
-        userInfo.lang = "english";
+        userInfo.sharedOnFb = $cookies.get('sharedOnFb')?(($cookies.get('sharedOnFb')=="false")?false:true):false;
         userInfo.loggedIn = false;
         
         if(userInfo.sessionToken) {
@@ -101,11 +100,18 @@ preppo.factory('userService', ['$http', 'apiDomainName', '$cookies', function($h
         return arr[0];
     }
     
+    function setLang(lang) {
+        userInfo.lang = lang;
+        var date = new Date("October 13, 9999 11:13:00");
+        $cookies.put('lang', lang, {expires: date});
+    }
+    
     var obj = {
         userInfo: userInfo,
         setUserInfoFromCookie: setUserInfoFromCookie,
         setUserInfoAndCookie: setUserInfoAndCookie,
-        clearUserInfoAndCookie: clearUserInfoAndCookie
+        clearUserInfoAndCookie: clearUserInfoAndCookie,
+        setLang: setLang
     };
     
     return obj;
@@ -308,7 +314,7 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
 preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http', 'dateToString', 'apiDomainName', '$location', '$route', function($scope, userService, $http, dateToString, apiDomainName, $location, $route) {
     $http.defaults.withCredentials = true;
     $scope.dateToString = dateToString;
-    $scope.currentDate = new Date('2016-03-03');
+    $scope.currentDate = new Date('2016-03-10');
     $scope.newsUpdates = [];
     $scope.fetchInfo = {};
     $scope.currentNews = 0;
@@ -503,6 +509,19 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
         $route.reload();
     };
     
+    $scope.changeLang = function() {
+        if(userService.userInfo.lang == 'english') {
+            $('.toggle-button').find('button').removeClass('left');
+            $('.toggle-button').find('button').addClass('right');
+            userService.setLang('hindi');
+        }
+        else {
+            $('.toggle-button').find('button').removeClass('right');
+            $('.toggle-button').find('button').addClass('left');
+            userService.setLang('english');
+        }
+    };
+    
 }]);
 
 preppo.controller('CAMonthlyDigestController', ['$scope', 'userService', '$http', 'apiDomainName', '$location', '$window', function($scope, userService, $http, apiDomainName, $location, $window) {
@@ -530,6 +549,19 @@ preppo.controller('CAMonthlyDigestController', ['$scope', 'userService', '$http'
     
     $scope.getClassName = function(index) {
         return $scope.classNames[index % $scope.classNames.length];
+    };
+    
+    $scope.changeLang = function() {
+        if(userService.userInfo.lang == 'english') {
+            $('.toggle-button').find('button').removeClass('left');
+            $('.toggle-button').find('button').addClass('right');
+            userService.setLang('hindi');
+        }
+        else {
+            $('.toggle-button').find('button').removeClass('right');
+            $('.toggle-button').find('button').addClass('left');
+            userService.setLang('english');
+        }
     };
 }]);
 
@@ -609,6 +641,19 @@ preppo.controller('CAQuizHomeController', ['$scope', 'userService', '$http', 'da
     $scope.fetchQuiz = function(index) {
         quizService.quiz = $scope.quizzes[index];
         $location.path('/currentAffairs/quiz/' + $scope.quizzes[index]._id);
+    };
+    
+    $scope.changeLang = function() {
+        if(userService.userInfo.lang == 'english') {
+            $('.toggle-button').find('button').removeClass('left');
+            $('.toggle-button').find('button').addClass('right');
+            userService.setLang('hindi');
+        }
+        else {
+            $('.toggle-button').find('button').removeClass('right');
+            $('.toggle-button').find('button').addClass('left');
+            userService.setLang('english');
+        }
     };
     
 }]);
@@ -776,6 +821,19 @@ preppo.controller('CAQuizOfficeController', ['$scope', 'userService', '$http', '
             }, function errorCallback(response) {
                 console.log('luls');
             });
+        }
+    };
+    
+    $scope.changeLang = function() {
+        if(userService.userInfo.lang == 'english') {
+            $('.toggle-button').find('button').removeClass('left');
+            $('.toggle-button').find('button').addClass('right');
+            userService.setLang('hindi');
+        }
+        else {
+            $('.toggle-button').find('button').removeClass('right');
+            $('.toggle-button').find('button').addClass('left');
+            userService.setLang('english');
         }
     };
     

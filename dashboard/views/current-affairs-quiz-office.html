@@ -15,6 +15,13 @@
         <div class="navbar-headers mobile-display" ng-click="$parent.goTo('Monthly Digest')">
             DIGEST
         </div>
+        <div class="mobile-hide lang-font" style="float: right; padding: 6px 12px 6px 3px;">हिंदी</div>
+        <div class="mobile-hide" style="float: right; padding: 6px 12px;">
+            <div class="toggle-button" ng-click="changeLang()">
+                <button ng-class="{ 'left': user.userInfo.lang == 'english', 'right': user.userInfo.lang == 'hindi' }"></button>
+            </div>
+        </div>
+        <div class="mobile-hide lang-font" style="float: right; padding: 6px 0px;">Eng</div>
     </div>
     <div class="sub-navbar">
         <span class="all-quizzes-breadcrumb" ng-click="goBack()">All Quizzes</span>

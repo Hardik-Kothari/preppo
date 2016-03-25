@@ -541,7 +541,10 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
 }]);
 
 preppo.controller('CAMonthlyDigestController', ['$scope', 'userService', '$http', 'apiDomainName', '$location', '$window', function($scope, userService, $http, apiDomainName, $location, $window) {
-    $scope.digests = [];
+    $scope.digests = {
+        'english': [],
+        'hindi': []
+    };
     $scope.classNames = ['class1', 'class2', 'class3', 'class4'];
     $scope.user = userService;
     $scope.fetched = false;
@@ -554,8 +557,9 @@ preppo.controller('CAMonthlyDigestController', ['$scope', 'userService', '$http'
         };
         var url = apiDomainName + "/news/monthlydigest";
         $http.get(url, config).then(function successCallback(response) {
-            $scope.digests = response.data;
-            console.log("digests : " + $scope.digests);
+            for(var i=0; i<response.data.length; i++) {
+                $scope.digests[response.data[i]['language']].push(response.data[i]);
+            }
             $scope.fetched = true;
         }, function errorCallback(response) {
             $scope.fetched = true;

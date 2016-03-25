@@ -32,7 +32,7 @@
             <p class="batti-message">Choose a month and read a summary of current affairs</p>
         </div>
         <div style="padding-top: 9px;" ng-show="fetched">
-            <div class="row" style="margin: 0px; padding: 9px 0px;" ng-repeat="digest in digests track by $index">
+            <div class="row" style="margin: 0px; padding: 9px 0px;" ng-repeat="digest in digests[user.userInfo.lang] track by $index">
                 <div class="col-xs-12 col-sm-9 col-md-7 col-lg-5">
                     <a target="_blank" href="{{digest.url}}" style="width: 100%; text-decoration: none;">
                         <div class="digest-card" ng-class="getClassName($index)">

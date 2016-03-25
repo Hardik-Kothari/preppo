@@ -353,11 +353,13 @@ a {
     letter-spacing: 0px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
 }
 
 #live-categories .categories :hover {
-    color: rgb(247, 247, 250);
-    background-color: rgba(255, 255, 255, 0.1);
     cursor: pointer;
 }
 
@@ -383,6 +385,10 @@ a {
     padding-left: 8px;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
 }
 
 #coming-soon-banner-triangle {
@@ -549,15 +555,23 @@ a {
     -moz-osx-font-smoothing: grayscale;
 }
 
+
+.no-select {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+}
+
 .toggle-button { 
-    background-color: #00bf15; border: 2px solid #7DA652; margin: 0px; border-radius: 8px; height: 16px; cursor: pointer; width: 50px; position: relative; display: inline-block; user-select: none; -webkit-user-select: none; -ms-user-select: none; -moz-user-select: none; 
+    background-color: #00bf15; margin: 0px; border-radius: 6px; height: 12px; cursor: pointer; width: 40px; position: relative; display: inline-block; user-select: none; -webkit-user-select: none; -ms-user-select: none; -moz-user-select: none; 
 }
 .toggle-button > .left { 
-    cursor: pointer; outline: 0; display:block; position: absolute; left: -3px; top: -5px; border-radius: 50%; background-color: white; margin: 0px; transition: left 0.3s; border: none; width: 22px; height: 22px; box-shadow: 0 0 4px rgba(0,0,0,0.1);
+    cursor: pointer; outline: 0; display:block; position: absolute; left: -3px; top: -3px; border-radius: 50%; background-color: white; margin: 0px; transition: left 0.3s; border: none; width: 18px; height: 18px; box-shadow: 0 0 4px rgba(0,0,0,0.1);
 }
 
 .toggle-button > .right { 
-    cursor: pointer; outline: 0; display:block; position: absolute; left: 34px; top: -5px; border-radius: 50%; background-color: white; margin: 0px; transition: left 0.3s; border: none; width: 22px; height: 22px; box-shadow: 0 0 4px rgba(0,0,0,0.1);
+    cursor: pointer; outline: 0; display:block; position: absolute; left: 24px; top: -3px; border-radius: 50%; background-color: white; margin: 0px; transition: left 0.3s; border: none; width: 18px; height: 18px; box-shadow: 0 0 4px rgba(0,0,0,0.1);
 }
 
 .lang-font {

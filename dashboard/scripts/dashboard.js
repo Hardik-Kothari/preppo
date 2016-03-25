@@ -1,7 +1,7 @@
 var preppo = angular.module('dashboardApp', ['ngCookies', 'ngRoute', 'ngSanitize']);
 
 preppo.config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/currentAffairs/dailyUpdates', {
+    $routeProvider.when('/currentAffairs/dailyUpdates/:mode', {
         templateUrl: './views/current-affairs-daily-updates.html',
         controller: 'CADailyUpdatesController'
     });
@@ -16,6 +16,9 @@ preppo.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/currentAffairs/quiz/:id', {
         templateUrl: './views/current-affairs-quiz-office.html',
         controller: 'CAQuizOfficeController'
+    });
+    $routeProvider.otherwise({
+        redirectTo: '/currentAffairs/dailyUpdates/normal'
     });
 }]);
 
@@ -153,7 +156,7 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
     function goTo(subCat) {
         if($scope.currentCategory == 'Current Affairs') {
             if(subCat == 'Daily Updates') {
-                $location.path('/currentAffairs/dailyUpdates');
+                $location.path('/currentAffairs/dailyUpdates/normal');
             }
             else if(subCat == 'Monthly Digest') {
                 $location.path('/currentAffairs/monthlyDigest');   
@@ -169,7 +172,16 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
 
         }
     }
-    goTo(subCategories[$scope.currentCategory][0]);
+    if($location.path() == '/currentAffairs/dailyUpdates/normal') {
+        goTo('Daily Updates');
+    }
+    else if($location.path() == '/currentAffairs/monthlyDigest') {
+        goTo('Monthly Digest');
+    }
+    else if($location.path() == '/currentAffairs/quiz') {
+        goTo('Quiz');
+    }
+    //goTo(subCategories[$scope.currentCategory][0]);
     $scope.goTo = goTo;
     
     $scope.travel = function(subCat) {
@@ -270,28 +282,6 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
     }
     
     $scope.fb = function() {
-    /*    FB.getLoginStatus(function(response) {
-            if (response.status === 'connected') {
-                console.log("jgd");
-                fblogin();
-            } else {
-                FB.login(function(response) {
-                    if (response.status === 'connected') {
-                        // Logged into your app and Facebook.
-                        console.log("jgd login");
-                        fblogin();
-                    } else if (response.status === 'not_authorized') {
-                        // The person is logged into Facebook, but not your app.
-                        console.log("not_authorized")
-
-                    } else {
-                        // The person is not logged into Facebook, so we're not sure if
-                        // they are logged into this app or not.
-                        console.log("else")
-                    }
-                }, {scope: 'public_profile, email, user_friends'});
-            }
-        });*/
         FB.login(function(response) {
             if (response.status === 'connected') {
                 // Logged into your app and Facebook.
@@ -311,10 +301,10 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
     
 }]);
 
-preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http', 'dateToString', 'apiDomainName', '$location', '$route', function($scope, userService, $http, dateToString, apiDomainName, $location, $route) {
+preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http', 'dateToString', 'apiDomainName', '$location', '$route', '$routeParams', function($scope, userService, $http, dateToString, apiDomainName, $location, $route, $routeParams) {
     $http.defaults.withCredentials = true;
     $scope.dateToString = dateToString;
-    $scope.currentDate = new Date('2016-03-10');
+    $scope.currentDate = new Date('2016-03-24');
     $scope.newsUpdates = [];
     $scope.fetchInfo = {};
     $scope.currentNews = 0;
@@ -371,6 +361,7 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
                 });     
             }
             else {
+                console.log('news : ' + JSON.stringify(response));
                 $scope.fetchingStatus = 2;
                 for(var i=0; i<response.data.length; i++) {
                     response.data[i]['dateString'] = dateString;
@@ -389,6 +380,9 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
         });
     }
     start();
+    if($routeParams.mode == 'transit') {
+        $scope.$parent.travel('Monthly Digest');
+    }
     
     $scope.fetchData = function(date) {
         var dt = new Date(date.getTime());
@@ -424,6 +418,7 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
                     isLastDate : true
                 };
             }
+            console.log('news' + JSON.stringify(response));
         }, function errorCallback(response) {
             $scope.errorDate = new Date(date.getTime());
             $scope.fetchingStatus = 0;

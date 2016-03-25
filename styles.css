@@ -190,14 +190,17 @@ html, body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-.row > span,
-.row > img {
-    margin-left: 12px;
-    cursor: pointer;
+.row > a {
+    color: #9B9B9B;
+    font-size: 12px;
+    font-family: 'robReg';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin-right: 12px;
 }
 
-.row > span:hover,
-.row > img:hover {
+.row > a:hover {
+    cursor: pointer;
     color: #ffffff;
 }
 

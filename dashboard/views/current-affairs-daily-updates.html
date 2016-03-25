@@ -1,5 +1,6 @@
 <div id="needs-focus" class="template-container" ng-keydown="keyPressed($event)" tabindex="0">
     <div class="navbar-top">
+        <span class="glyphicon glyphicon-menu-hamburger mobile-display" style="color: white; font-size: 18px;" ng-click="$parent.tester()"></span>
         <div class="navbar-headers active mobile-hide">
             DAILY UPDATES
         </div>
@@ -22,9 +23,6 @@
             </div>
         </div>
         <div class="mobile-hide lang-font" style="float: right; padding: 6px 0px;">Eng</div>
-    </div>
-    <div class="navbar-top mobile-display">
-        <span ng-class="{ 'left': $parent.shouldFloatLeft, 'right': !$parent.shouldFloatLeft }" class="glyphicon glyphicon-menu-hamburger" style="color: white;" ng-click="$parent.tester()"></span>
     </div>
     <div id="news-update-main" style="z-index: 200;">
         <div class="top-space"></div>

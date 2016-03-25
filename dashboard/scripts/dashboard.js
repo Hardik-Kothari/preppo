@@ -152,6 +152,7 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
     $scope.loading = false;
     $scope.isDrawerOpen = false;
     $scope.shouldFloatLeft = true;
+    $scope.user = userService;
     
     userService.setUserInfoFromCookie();
     
@@ -304,6 +305,19 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
                 console.log("else")
             }
         }, {scope: 'public_profile, email, user_friends'});
+    };
+    
+    $scope.changeLang = function() {
+        if(userService.userInfo.lang == 'english') {
+            $('.toggle-button').find('button').removeClass('left');
+            $('.toggle-button').find('button').addClass('right');
+            userService.setLang('hindi');
+        }
+        else {
+            $('.toggle-button').find('button').removeClass('right');
+            $('.toggle-button').find('button').addClass('left');
+            userService.setLang('english');
+        }
     };
     
 }]);
@@ -541,6 +555,7 @@ preppo.controller('CAMonthlyDigestController', ['$scope', 'userService', '$http'
         var url = apiDomainName + "/news/monthlydigest";
         $http.get(url, config).then(function successCallback(response) {
             $scope.digests = response.data;
+            console.log("digests : " + $scope.digests);
             $scope.fetched = true;
         }, function errorCallback(response) {
             $scope.fetched = true;

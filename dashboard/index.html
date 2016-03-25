@@ -129,6 +129,15 @@
         
         <div id="drawer-backdrop" ng-show="isDrawerOpen" ng-click="tester()"></div>
         <div id="drawer" ng-class="{ 'open': isDrawerOpen, 'close': !isDrawerOpen }">     
+            <span style="font-size: 18px; color: white;" class="glyphicon glyphicon-menu-hamburger" ng-click="tester()"></span>
+            <div style="padding-top: 18px; color: white;">Select Language</div>
+            <div class="lang-font" style="float: left; padding: 12px 0px;">Eng</div>
+            <div style="float: left; padding: 12px;">
+                <div class="toggle-button" ng-click="changeLang()">
+                    <button ng-class="{ 'left': user.userInfo.lang == 'english', 'right': user.userInfo.lang == 'hindi' }"></button>
+                </div>
+            </div>
+            <div class="lang-font" style="float: left; padding: 12px 12px 12px 3px;">हिंदी</div>
         </div>
     </body>
 

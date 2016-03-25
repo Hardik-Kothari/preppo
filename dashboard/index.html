@@ -126,6 +126,10 @@
         <div id='main-panel'>
             <div ng-view style="height: 100%;"></div>
         </div>
+        
+        <div id="drawer-backdrop" ng-show="isDrawerOpen" ng-click="tester()"></div>
+        <div id="drawer" ng-class="{ 'open': isDrawerOpen, 'close': !isDrawerOpen }">     
+        </div>
     </body>
 
 </html>

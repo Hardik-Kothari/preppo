@@ -150,8 +150,15 @@ preppo.factory('quizService', function() {
 preppo.controller('MainController', ['$scope', 'userService', 'categories', 'subCategories', '$location', 'apiDomainName', '$http', function($scope, userService, categories, subCategories, $location, apiDomainName, $http) {
     $scope.currentCategory = categories[0];
     $scope.loading = false;
+    $scope.isDrawerOpen = false;
+    $scope.shouldFloatLeft = true;
     
     userService.setUserInfoFromCookie();
+    
+    $scope.tester = function() {
+        $scope.shouldFloatLeft = !$scope.shouldFloatLeft;
+        $scope.isDrawerOpen = !$scope.isDrawerOpen;
+    };
     
     function goTo(subCat) {
         if($scope.currentCategory == 'Current Affairs') {

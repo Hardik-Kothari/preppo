@@ -1,6 +1,6 @@
 var preppo = angular.module('dashboardApp', ['ngCookies', 'ngRoute', 'ngSanitize']);
 
-preppo.config(['$routeProvider', function($routeProvider) {
+preppo.config(['$routeProvider', '$compileProvider', function($routeProvider, $compileProvider) {
     $routeProvider.when('/currentAffairs/dailyUpdates/:mode', {
         templateUrl: './views/current-affairs-daily-updates.html',
         controller: 'CADailyUpdatesController'
@@ -20,6 +20,8 @@ preppo.config(['$routeProvider', function($routeProvider) {
     $routeProvider.otherwise({
         redirectTo: '/currentAffairs/dailyUpdates/normal'
     });
+    // For production. Enable for Protractor and Batarang
+    $compileProvider.debugInfoEnabled(false);
 }]);
 
 preppo.run(function ($rootScope, $timeout) {

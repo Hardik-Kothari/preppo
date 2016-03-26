@@ -566,6 +566,7 @@ a {
 .toggle-button { 
     background-color: #00bf15; margin: 0px; border-radius: 6px; height: 12px; cursor: pointer; width: 40px; position: relative; display: inline-block; user-select: none; -webkit-user-select: none; -ms-user-select: none; -moz-user-select: none; 
 }
+
 .toggle-button > .left { 
     cursor: pointer; outline: 0; display:block; position: absolute; left: -3px; top: -3px; border-radius: 50%; background-color: white; margin: 0px; transition: left 0.3s; border: none; width: 18px; height: 18px; box-shadow: 0 0 4px rgba(0,0,0,0.1);
 }

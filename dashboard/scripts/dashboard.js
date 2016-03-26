@@ -218,8 +218,8 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
             if(!usr.sharedOnFb) {
                 FB.ui({
                     method: 'feed',
-                    link: 'http://dev.preppo.in',
-                    caption: 'An example caption'
+                    link: 'https://preppo.in',
+                    caption: 'Continue your preparations on the go !'
                 }, function(response){
                     //console.log("response : " + response);
                     if(response['post_id']) {

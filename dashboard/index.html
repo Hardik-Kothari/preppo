@@ -98,7 +98,7 @@
             <div class="modal-dialog my-modal-dialog" role="document">
                 <div class="modal-content" style="border-radius: 2px; background-color: #ffffff;">
                     <div class="row" style="margin: 0px; width: 100%;">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="padding-right: 6px;">&times;</span></button>
                         <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3">
                             <div style="height: 18px;"></div>
                             <div style="text-align: center;">
@@ -129,13 +129,13 @@
             <span style="font-size: 18px; color: white;" class="glyphicon glyphicon-menu-hamburger" ng-click="tester()"></span>
             <div style="padding-top: 18px; color: white;">Select Language</div>
             <div style="height: 6px;"></div>
-            <div class="mobile-hide lang-font" style="float: left; padding: 6px 0px;">Eng</div>
-            <div class="mobile-hide" style="float: left; padding: 6px 12px;">
+            <div class="lang-font" style="float: left; padding: 6px 0px;">Eng</div>
+            <div style="float: left; padding: 6px 12px;">
                 <div class="toggle-button" ng-click="changeLang()">
                     <button ng-class="{ 'left': user.userInfo.lang == 'english', 'right': user.userInfo.lang == 'hindi' }"></button>
                 </div>
             </div>
-            <div class="mobile-hide lang-font" style="float: left; padding: 6px 12px 6px 3px;">हिंदी</div>
+            <div class="lang-font" style="float: left; padding: 6px 12px 6px 3px;">हिंदी</div>
         </div>
     </body>
 

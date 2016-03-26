@@ -221,7 +221,7 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
                     link: 'http://dev.preppo.in',
                     caption: 'An example caption'
                 }, function(response){
-                    console.log("response : " + response);
+                    //console.log("response : " + response);
                     if(response['post_id']) {
                         var dt = {
                             sharedOnFb: true
@@ -238,7 +238,7 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
                             userService.setUserInfoAndCookie(data['x-session-token'], true, usr.lang?usr.lang:'english');
                             $scope.goTo('Monthly Digest');
                         }, function errorCallback(response){
-                            console.log('error : ' + JSON.stringify(response));
+                            //console.log('error : ' + JSON.stringify(response));
                         }); 
                     }
                     else {
@@ -255,7 +255,7 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
                 alert("Invalid token.");
             }
             else {
-                console.log('error : ' + JSON.stringify(response));
+                //console.log('error : ' + JSON.stringify(response));
             } 
         });
     }
@@ -264,16 +264,16 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
         FB.login(function(response) {
             if (response.status === 'connected') {
                 // Logged into your app and Facebook.
-                console.log("jgd login");
+                //console.log("jgd login");
                 fblogin(response);
             } else if (response.status === 'not_authorized') {
                 // The person is logged into Facebook, but not your app.
-                console.log("not_authorized")
+                //console.log("not_authorized")
 
             } else {
                 // The person is not logged into Facebook, so we're not sure if
                 // they are logged into this app or not.
-                console.log("else")
+                //console.log("else")
             }
         }, {scope: 'public_profile, email, user_friends'});
     };
@@ -354,7 +354,7 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
                 });     
             }
             else {
-                console.log('news : ' + JSON.stringify(response));
+                //console.log('news : ' + JSON.stringify(response));
                 $scope.fetchingStatus = 2;
                 for(var i=0; i<response.data.length; i++) {
                     response.data[i]['dateString'] = dateString;
@@ -411,7 +411,7 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
                     isLastDate : true
                 };
             }
-            console.log('news' + JSON.stringify(response));
+            //console.log('news' + JSON.stringify(response));
         }, function errorCallback(response) {
             $scope.errorDate = new Date(date.getTime());
             $scope.fetchingStatus = 0;
@@ -603,7 +603,7 @@ preppo.controller('CAQuizHomeController', ['$scope', 'userService', '$http', 'da
         var url = apiDomainName + "/news/quiz";
         $http.get(url, config).then(function successCallback(response) {
             var quizzes = response.data;
-            console.log("quiz : " + JSON.stringify(quizzes));
+            //console.log("quiz : " + JSON.stringify(quizzes));
             if(quizzes.length < $scope.fetchLimit) {
                 $scope.belowDataStatus = 3;
             }
@@ -624,7 +624,7 @@ preppo.controller('CAQuizHomeController', ['$scope', 'userService', '$http', 'da
                     break;
                 }
             }
-            console.log("quiz : " + JSON.stringify(quizzes));
+            //console.log("quiz : " + JSON.stringify(quizzes));
             $scope.quizzes = $scope.quizzes.concat(quizzes);
         }, function errorCallback(response) {
             $scope.belowDataStatus = 1;
@@ -796,7 +796,7 @@ preppo.controller('CAQuizOfficeController', ['$scope', 'userService', '$http', '
         $('body').removeClass('modal-open');
         $('.modal-backdrop').remove();
         $scope.goBack();
-        console.log($scope.quiz._id);
+        //console.log($scope.quiz._id);
         
         if(rating != 0) {
             var data = {
@@ -810,9 +810,9 @@ preppo.controller('CAQuizOfficeController', ['$scope', 'userService', '$http', '
             };
             var url = apiDomainName + "/extra/ratings/news/quiz";
             $http.post(url, data, config).then(function successCallback(response) {
-                console.log('lols');
+                //console.log('lols');
             }, function errorCallback(response) {
-                console.log('luls');
+                //console.log('luls');
             });
         }
     };

@@ -219,7 +219,7 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
                 FB.ui({
                     method: 'feed',
                     link: 'https://preppo.in',
-                    caption: 'Continue your preparations on the go !'
+                    caption: 'preppo.in'
                 }, function(response){
                     //console.log("response : " + response);
                     if(response['post_id']) {
@@ -477,6 +477,18 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
         $scope.newsIndexToBeCompared[$scope.visible] = 0;
         $scope.currentDate = $scope.firstDate;
         //$scope.newsUpdates = clone;
+    };
+    
+    $scope.share = function(index) {
+        var lang = (userService.userInfo.lang == 'english')?'e':'h';
+        var url = "https://preppo.in/news/" + $scope.newsUpdates[index].dateString + "/" + $scope.newsUpdates[index].content.english.heading + "?l=" + lang + "&id=" + $scope.newsUpdates[index]._id;
+        FB.ui({
+            method: 'feed',
+            link: url,
+            caption: 'preppo.in'
+        }, function(response){
+            console.log(JSON.stringify(response));
+        });
     };
     
     $scope.prettify = function(str) {

@@ -1,6 +1,6 @@
 var preppo = angular.module('dashboardApp', ['ngCookies', 'ngRoute', 'ngSanitize']);
 
-preppo.config(['$routeProvider', '$compileProvider', function($routeProvider, $compileProvider) {
+preppo.config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/currentAffairs/dailyUpdates/:mode', {
         templateUrl: './views/current-affairs-daily-updates.html',
         controller: 'CADailyUpdatesController'
@@ -20,17 +20,15 @@ preppo.config(['$routeProvider', '$compileProvider', function($routeProvider, $c
     $routeProvider.otherwise({
         redirectTo: '/currentAffairs/dailyUpdates/normal'
     });
-    // For production. Enable for Protractor and Batarang
-    $compileProvider.debugInfoEnabled(false);
 }]);
 
-preppo.run(function ($rootScope, $timeout) {
+preppo.run(['$rootScope', '$timeout', function ($rootScope, $timeout) {
     $rootScope.$on('$viewContentLoaded', function() {
         $timeout(function() {
             componentHandler.upgradeAllRegistered();
         });
     });
-});
+}]);
 
 preppo.constant('apiDomainName', 'https://prod.api.preppo.in/v1/app');
 
@@ -218,35 +216,6 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
             var usr = data['user'];
             userService.setUserInfoAndCookie(data['x-session-token'], usr.sharedOnFb?true: false, usr.lang?usr.lang:'english');
             if(!usr.sharedOnFb) {
-                /*
-                FB.ui({
-                    method: 'share',
-                    href: 'http://dev.preppo.in',
-                }, function(response){
-                    if(response['post_id']) {
-                        var dt = {
-                            sharedOnFb: true
-                        };
-                        var config = {
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'x-session-token': data['x-session-token']
-                            }
-                        };
-                        var url = apiDomainName + '/users/me';
-                        $http.put(url, dt, config).then(function successCallback(response) {
-                            $('#shareModal').modal('hide');
-                            userService.setUserInfoAndCookie(data['x-session-token'], true, usr.lang?usr.lang:'english');
-                            $scope.goTo('Monthly Digest');
-                        }, function errorCallback(response){
-                            console.log('error : ' + JSON.stringify(response));
-                        }); 
-                    }
-                    else {
-                        //
-                    }
-                });
-                */
                 FB.ui({
                     method: 'feed',
                     link: 'http://dev.preppo.in',
@@ -327,7 +296,7 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
 preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http', 'dateToString', 'apiDomainName', '$location', '$route', '$routeParams', function($scope, userService, $http, dateToString, apiDomainName, $location, $route, $routeParams) {
     $http.defaults.withCredentials = true;
     $scope.dateToString = dateToString;
-    $scope.currentDate = new Date('2016-03-24');
+    $scope.currentDate = new Date();
     $scope.newsUpdates = [];
     $scope.fetchInfo = {};
     $scope.currentNews = 0;
@@ -378,6 +347,7 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
                         };
                         $scope.firstDate = new Date(dt.getTime());
                         $scope.newsIndexToBeCompared[$scope.visible] = $scope.currentNews;
+                        $scope.currentDate.setDate($scope.currentDate.getDate() - 1);
                     }
                 }, function errorCallback(response) {
                     $scope.fetchingStatus = 4;
@@ -458,7 +428,7 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
         else {
             $($scope.ids[$scope.visible]).carousel('prev');
             if($scope.currentNews == $scope.newsUpdates.length || $scope.currentNews == $scope.fetchInfo[dateToString.convert($scope.currentDate)].total) {
-                $scope.currentDate.setDate($scope.currentDate.getDate() + 1);            
+                $scope.currentDate.setDate($scope.currentDate.getDate() + 1);
             }
             $scope.currentNews--;
         }

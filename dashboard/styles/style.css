@@ -470,11 +470,6 @@ a {
     -moz-osx-font-smoothing: grayscale;
 }
 
-.option-card:hover {
-    background-color: #f5f5f5;
-    border-left: 3px solid #f5f5f5;
-}
-
 .all-quizzes-breadcrumb {
     margin-right: 6px;
     color: white; 
@@ -692,6 +687,16 @@ a {
 .mobile-display, .mobile-hide {
 }
 
+.description-style {
+    line-height: 23px;
+    font-size: 17px;
+    font-family: 'charter';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #212121;
+    width: 100%;
+}
+
 @media (max-width: 768px) {
     .my-modal-dialog {
         width: 90%;
@@ -752,6 +757,10 @@ a {
         font-size: 13px;
         margin-bottom: 14px;
     }
+    .description-style {
+        line-height: 20px;
+        font-size: 14px;
+    }
     .blank-space {
         height: 40px;
     }
@@ -766,6 +775,10 @@ a {
 @media (min-width: 768px) {
     .mobile-display {
         display: none;
+    }
+    .option-card:hover {
+        background-color: #f5f5f5;
+        border-left: 3px solid #f5f5f5;
     }
 }
 
@@ -835,16 +848,6 @@ a {
     font-family: 'robMed';
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;   
-}
-
-.description-style {
-    line-height: 23px;
-    font-size: 17px;
-    font-family: 'charter';
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: #212121;
-    width: 100%;
 }
 
 .next-button {

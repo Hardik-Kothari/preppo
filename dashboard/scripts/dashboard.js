@@ -481,7 +481,8 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
     
     $scope.share = function(index) {
         var lang = (userService.userInfo.lang == 'english')?'e':'h';
-        var url = "https://preppo.in/news/" + $scope.newsUpdates[index].dateString + "/" + $scope.newsUpdates[index].content.english.heading + "?l=" + lang + "&id=" + $scope.newsUpdates[index]._id;
+        var header = $scope.newsUpdates[index].content.english.heading.replace(/ /g,"-");
+        var url = "https://preppo.in/news/" + $scope.newsUpdates[index].dateString + "/" + header + "?l=" + lang + "&id=" + $scope.newsUpdates[index]._id;
         FB.ui({
             method: 'feed',
             link: url,
@@ -492,11 +493,11 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
     };
     
     $scope.prettify = function(str) {
-        str = str.replace("&nbsp;", "");
-        str = str.replace("<br>", "");
-        str = str.replace("<br/>", "");
-        str = str.replace("<br >", "");
-        str = str.replace("<br />", "");
+        str = str.replace(/&nbsp;/g, "");
+        str = str.replace(/<br>/g, "");
+        str = str.replace(/<br\/>/g, "");
+        str = str.replace(/<br >/g, "");
+        str = str.replace(/<br \/>/g, "");
         return str;
     };
     

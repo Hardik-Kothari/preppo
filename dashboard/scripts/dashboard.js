@@ -809,11 +809,10 @@ preppo.controller('CAQuizOfficeController', ['$scope', 'userService', '$http', '
         $('body').removeClass('modal-open');
         $('.modal-backdrop').remove();
         $scope.goBack();
-        //console.log($scope.quiz._id);
         
         if(rating != 0) {
             var data = {
-                'quizId': $scope.quiz._id,
+                'quizId': $scope.id,
                 'rating': rating
             };
             var config = {

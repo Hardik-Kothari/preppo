@@ -95,6 +95,18 @@
           // successful.  See statusChangeCallback() for when this call is made.
         </script>
         
+        <script>
+            +function(l,y,t,i,c,s) {
+                l['LocalyticsGlobal'] = i;
+                l[i] = function() { (l[i].q = l[i].q || []).push(arguments) };
+                l[i].t = +new Date;
+                (s = y.createElement(t)).type = 'text/javascript';
+                s.src = '//web.localytics.com/v3/localytics.js';
+                (c = y.getElementsByTagName(t)[0]).parentNode.insertBefore(s, c);
+                ll('init', '8a2d88eca6e02b98f2babec-74c10676-f58e-11e5-6e1c-002dea3c3994', {} /* Options */);
+            }(window, document, 'script', 'll');
+        </script>
+        
         <!-- Share dialog box opens -->
         <div class="modal fade" id="shareModal" tabindex="-1" role="dialog">
             <div class="modal-dialog my-modal-dialog" role="document">

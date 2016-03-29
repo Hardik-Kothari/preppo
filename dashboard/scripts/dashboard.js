@@ -214,6 +214,10 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
         $http.post(url, data, config).then(function successCallback(response) {
             var data = response.data;
             var usr = data['user'];
+            if(data['isNewUser']) {
+                //Localytics
+                ll('tagEvent', 'signup', { 'identity': 'fb' });
+            }
             userService.setUserInfoAndCookie(data['x-session-token'], usr.sharedOnFb?true: false, usr.lang?usr.lang:'english');
             if(!usr.sharedOnFb) {
                 FB.ui({
@@ -221,8 +225,10 @@ preppo.controller('MainController', ['$scope', 'userService', 'categories', 'sub
                     link: 'https://preppo.in',
                     caption: 'preppo.in'
                 }, function(response){
-                    //console.log("response : " + response);
                     if(response['post_id']) {
+                        //Localytics
+                        ll('tagEvent', 'share-app', { 'via': 'fb' });
+                        
                         var dt = {
                             sharedOnFb: true
                         };
@@ -309,6 +315,10 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
     $scope.errorDate = new Date();
     $scope.arr = [0, 1];
     $scope.ids = ['#carousel-0', '#carousel-1'];
+    $scope.localytics = {
+        'count': 0,
+        'start': new Date()
+    };
     
     function start() {
         var dt = new Date($scope.currentDate.getTime());
@@ -450,6 +460,9 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
                 $scope.currentDate.setDate($scope.currentDate.getDate() - 1);
             }
             $scope.currentNews++;
+            if($scope.currentNews>$scope.localytics.count) {
+                $scope.localytics.count = $scope.currentNews;
+            }
         }
     };
     
@@ -487,8 +500,11 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
             method: 'feed',
             link: url,
             caption: 'preppo.in'
-        }, function(response){
-            console.log(JSON.stringify(response));
+        }, function(response) {
+            if(response['post_id']) {
+                //Localytics
+                ll('tagEvent', 'share-news');
+            }
         });
     };
     
@@ -520,6 +536,21 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
             $('.toggle-button').find('button').removeClass('right');
             $('.toggle-button').find('button').addClass('left');
             userService.setLang('english');
+        }
+    };
+    
+    $scope.tabChanged = function(newTab) {
+        if(newTab == 'Quiz') {
+            var abhi = new Date();
+            //Localytics
+            ll('tagEvent', 'view-news', { 'duration': Math.round((abhi-$scope.localytics.start)/60000), '# read': $scope.localytics.count+1 });
+            $scope.$parent.goTo('Quiz');   
+        }
+        else if(newTab == 'Monthly Digest') {
+            var abhi = new Date();
+            //Localytics
+            ll('tagEvent', 'view-news', { 'duration': Math.round((abhi-$scope.localytics.start)/60000), '# read': $scope.localytics.count+1 });
+            $scope.$parent.travel('Monthly Digest');
         }
     };
     
@@ -569,6 +600,12 @@ preppo.controller('CAMonthlyDigestController', ['$scope', 'userService', '$http'
             userService.setLang('english');
         }
     };
+    
+    $scope.digestClicked = function(index) {
+        //Localytics
+        ll('tagEvent', 'view-monthly-digest', { 'month': $scope.digests[$scope.user.userInfo.lang].name });
+    };
+    
 }]);
 
 preppo.controller('CAQuizHomeController', ['$scope', 'userService', '$http', 'dateToString', '$location', 'apiDomainName', 'quizService', function($scope, userService, $http, dateToString, $location, apiDomainName, quizService) {
@@ -664,7 +701,7 @@ preppo.controller('CAQuizHomeController', ['$scope', 'userService', '$http', 'da
     
 }]);
 
-preppo.controller('CAQuizOfficeController', ['$scope', 'userService', '$http', '$routeParams', 'apiDomainName', 'quizService', '$window', '$location', function($scope, userService, $http, $routeParams, apiDomainName, quizService, $window, $location) {
+preppo.controller('CAQuizOfficeController', ['$scope', 'userService', '$http', '$routeParams', 'apiDomainName', 'quizService', '$window', '$location', 'dateToString', function($scope, userService, $http, $routeParams, apiDomainName, quizService, $window, $location, dateToString) {
     $scope.id = $routeParams.id;
     $scope.quiz = quizService.quiz;
     $scope.questions = [];
@@ -696,6 +733,9 @@ preppo.controller('CAQuizOfficeController', ['$scope', 'userService', '$http', '
     $scope.bottomButtonLabel = "NEXT";
     $scope.user = userService;
     $scope.isClicked = [false, false, false, false, false];
+    $scope.localytics = {
+        'start': new Date()  
+    };
     
     function resetQuestion() {
         var question = $scope.questions[$scope.currentQuestionIndex - 1];
@@ -782,6 +822,12 @@ preppo.controller('CAQuizOfficeController', ['$scope', 'userService', '$http', '
     };
     
     $scope.goBack = function() {
+        // Localytics
+        var abhi = new Date();
+        var quizDate = new Date($scope.quiz.publishDate);
+        var day = (quizDate.getDay()+6)%7;
+        quizDate.setDate(quizDate.getDate() - day);
+        ll('tagEvent', 'view-news-quiz', { 'type': $scope.quiz.type, 'duration': Math.round((abhi-$scope.localytics.start)/60000), 'quiz-week': dateToString.convert(quizDate), 'status': 'new', '# viewed': $scope.currentQuestionIndex, '% viewed': Math.round(100*$scope.currentQuestionIndex/$scope.questions.length), '# attempted': $scope.attemptedQuestions, '% attempted': Math.round(100*$scope.attemptedQuestions/$scope.questions.length), '% correct': Math.round(100*$scope.correctAnswers/$scope.attemptedQuestions) });
         $window.history.back();  
     };
     

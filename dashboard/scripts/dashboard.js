@@ -495,7 +495,7 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
     $scope.share = function(index) {
         var lang = (userService.userInfo.lang == 'english')?'e':'h';
         var header = $scope.newsUpdates[index].content.english.heading.replace(/ /g,"-");
-        var url = "https://preppo.in/news/" + $scope.newsUpdates[index].dateString + "/" + header + "?l=" + lang + "&id=" + $scope.newsUpdates[index]._id;
+        var url = "https://preppo.in/news/" + $scope.newsUpdates[index].dateString + "/" + header.replace(/[^\w-]/g, "") + "?l=" + lang + "&id=" + $scope.newsUpdates[index]._id;
         FB.ui({
             method: 'feed',
             link: url,

@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+    
+    <head>
+        
+        <meta charset="utf-8">
+        <title>Preppo - Best app for Current-Affairs</title>
+        <meta name="viewport" content="width=device-width">
+        
+        <meta name="description" content="Prepare for IBPS PO, IBPS Clerk, SBI PO, SBI Clerk, SSC CGL, SSC CHSL & UPSC exams on the move by keeping yourself updated with GK & daily Current Affairs. Study in both English and Hindi, take daily updated quizzes specially designed for each exam and test your preparation"/>
+        <meta name="keywords" content="SBI PO, SBI Po Exam, SBI Recruitment, SBI PO Recruitment, sbi bank po, sbi po online, sbi jobs, sbi careers, SBI Clerk, SBI Associate Clerk, SBI Exams, Banking Exams, GK, current affairs, current affairs 2016, banking current affairs, upsc current affairs, IBPS PO, IBPS Clerk, SSC, SSC CGL, SSC CHSL, Railways, LIC AAO, Banking jobs"/>
+        
+        <meta property="og:title" content="Preppo - Best app for Current-Affairs" />
+        <meta property="og:description" content="Read, Revise and Remember Current Affairs like never before and stay ahead in competition." />
+        <meta property="og:image" content="https://storage.googleapis.com/public-prod-preppo/news/jcjxrepho_device-2016-03-28-134605.png" />
+        
+        
+        <script >
+            var isMobile = {
+                Android: function() {
+                    return navigator.userAgent.match(/Android/i);
+                },
+                BlackBerry: function() {
+                    return navigator.userAgent.match(/BlackBerry/i);
+                },
+                iOS: function() {
+                    return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+                },
+                Opera: function() {
+                    return navigator.userAgent.match(/Opera Mini/i);
+                },
+                Windows: function() {
+                    return navigator.userAgent.match(/IEMobile/i) || navigator.userAgent.match(/WPDesktop/i);
+                },
+                any: function() {
+                    return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+                }
+            };
+
+            function redirect () {
+                if( isMobile.Android() ) {
+                    var args = window.location.search.substring(1); //removing ?
+                    var redirect_url = "https://play.google.com/store/apps/details?id=preppo.current_affairs&" + args;
+                    window.location = redirect_url;
+                }
+                else {
+                    var args = window.location.search.substring(10); //removing ?referrer=
+                    var redirect_url = "https://preppo.in?" + decodeURIComponent(args); 
+                    window.location = redirect_url;
+                }
+            }
+        </script>
+    </head>
+
+    <body onload="redirect()">
+    </body>
+
+</html>

@@ -16,13 +16,14 @@
         <div class="navbar-headers mobile-display" ng-click="tabChanged('Monthly Digest')">
             DIGEST
         </div>
-        <div class="mobile-hide lang-font" style="float: right; padding: 6px 12px 6px 3px;">हिंदी</div>
+        <div class="mobile-hide lang-font" ng-style="{ 'float': 'right', 'padding': '6px 12px 6px 3px', 'color': (user.userInfo.lang == 'hindi')?'white':'rgba(255, 255, 255, 0.5)' }">हिंदी</div>
         <div class="mobile-hide" style="float: right; padding: 6px 12px;">
             <div class="toggle-button" ng-click="changeLang()">
                 <button ng-class="{ 'left': user.userInfo.lang == 'english', 'right': user.userInfo.lang == 'hindi' }"></button>
             </div>
         </div>
-        <div class="mobile-hide lang-font" style="float: right; padding: 6px 0px;">Eng</div>
+        <div class="mobile-hide lang-font" ng-style="{ 'float': 'right', 'padding': '6px 0px',  'color': (user.userInfo.lang == 'english')?'white':'rgba(255, 255, 255, 0.5)' }">Eng</div>
+        <a class="download-app-button mobile-hide" style="text-decoration: none; float: right; margin-right: 42px;" target="_blank" href="https://goo.gl/82Wvij"><img src="./resources/app.svg" style="margin-right: 6px;" >DOWNLOAD APP</a>
     </div>
     <div id="news-update-main" style="z-index: 200;">
         <div class="top-space"></div>

@@ -514,6 +514,10 @@ preppo.controller('CADailyUpdatesController', ['$scope', 'userService', '$http',
         str = str.replace(/<br\/>/g, "");
         str = str.replace(/<br >/g, "");
         str = str.replace(/<br \/>/g, "");
+        str = str.replace(/&rsquo;/g, "'");
+        str = str.replace(/&lsquo;/g, "'");
+        str = str.replace(/&rdquo;/g, '"');
+        str = str.replace(/&ldquo;/g, '"');
         return str;
     };
     

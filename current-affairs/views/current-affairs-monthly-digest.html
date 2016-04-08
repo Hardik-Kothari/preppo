@@ -1,0 +1,59 @@
+<div class="template-container">
+    <div class="navbar-top">
+        <span class="glyphicon glyphicon-menu-hamburger mobile-display" style="color: white; font-size: 18px;" ng-click="$parent.tester()"></span>
+        <div class="navbar-headers mobile-hide" ng-click="$parent.goTo('Daily Updates')">
+            DAILY UPDATES
+        </div>
+        <div class="navbar-headers mobile-display" ng-click="$parent.goTo('Daily Updates')">
+            UPDATES
+        </div>
+        <div class="navbar-headers" ng-click="$parent.goTo('Quiz')">
+            QUIZ
+        </div>
+        <div class="navbar-headers active mobile-hide">
+            MONTHLY DIGEST
+        </div>
+        <div class="navbar-headers active mobile-display">
+            DIGEST
+        </div>
+        <div class="mobile-hide lang-font" ng-style="{ 'float': 'right', 'padding': '6px 12px 6px 3px', 'color': (user.userInfo.lang == 'hindi')?'white':'rgba(255, 255, 255, 0.5)' }">हिंदी</div>
+        <div class="mobile-hide" style="float: right; padding: 6px 12px;">
+            <div class="toggle-button" ng-click="changeLang()">
+                <button ng-class="{ 'left': user.userInfo.lang == 'english', 'right': user.userInfo.lang == 'hindi' }"></button>
+            </div>
+        </div>
+        <div class="mobile-hide lang-font" ng-style="{ 'float': 'right', 'padding': '6px 0px',  'color': (user.userInfo.lang == 'english')?'white':'rgba(255, 255, 255, 0.5)' }">Eng</div>
+        <a class="download-app-button mobile-hide" style="text-decoration: none; float: right; margin-right: 42px;" target="_blank" href="https://goo.gl/82Wvij"><img src="./resources/app.svg" style="margin-right: 6px;" >DOWNLOAD APP</a>
+    </div>
+    <div id="all-digests">
+        <div class="ceiling-space"></div>
+        <div style="height: 24px; padding-left: 15px;">
+            <img src="./resources/bulb.svg" style="height: 20px; width: 20px; float: left;">
+            <div style="width: 12px; height: 24px; float:left;"></div>
+            <p class="batti-message">Choose a month and read a summary of current affairs</p>
+        </div>
+        <div style="padding-top: 9px;" ng-show="fetched">
+            <div class="row" style="margin: 0px; padding: 9px 0px;" ng-repeat="digest in digests[user.userInfo.lang] track by $index">
+                <div class="col-xs-12 col-sm-9 col-md-7 col-lg-5">
+                    <a target="_blank" href="{{digest.url}}" style="width: 100%; text-decoration: none;" ng-click="digestClicked($index)">
+                        <div class="digest-card" ng-class="getClassName($index)">
+                            {{digest.name}}
+                            <div class="right-chevron">
+                                <img src="./resources/right-chevron.svg">
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div style="padding-top: 9px;" ng-show="!fetched">
+            <div class="row" style="margin: 0px; padding: 9px 0px;">
+                <div class="col-xs-12 col-sm-9 col-md-7 col-lg-5">
+                    <div class="digest-card" style="box-shadow: none; background-color: rgba(0, 0, 0, 0); border: none; line-height: 0px; text-align: center;">
+                        <div class="mdl-spinner mdl-js-spinner is-active"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

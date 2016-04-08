@@ -1,0 +1,160 @@
+<!doctype html>
+<html ng-app="dashboardApp" style="height:100%;">
+    <head>
+        
+        <meta charset="utf-8">
+        <title>Preppo - Current Affairs App for SBI PO, SBI Clerk, IBPS PO, IBPS Clerk, SSC & UPSC</title>
+        <meta name="viewport" content="width=device-width">
+        
+        <meta name="description" content="Prepare for IBPS PO, IBPS Clerk, SBI PO, SBI Clerk, SSC CGL, SSC CHSL & UPSC exams on the move by keeping yourself updated with GK & daily Current Affairs. Study in both English and Hindi, take daily updated quizzes specially designed for each exam and test your preparation"/>
+        <meta name="keywords" content="SBI PO, SBI Po Exam, SBI Recruitment, SBI PO Recruitment, sbi bank po, sbi po online, sbi jobs, sbi careers, SBI Clerk, SBI Associate Clerk, SBI Exams, Banking Exams, GK, current affairs, current affairs 2016, banking current affairs, upsc current affairs, IBPS PO, IBPS Clerk, SSC, SSC CGL, SSC CHSL, Railways, LIC AAO, Banking jobs"/>
+        
+        <link rel="icon" href="../favicon.png" />
+        <link rel="alternate" href="android-app://preppo.current_affairs/preppo/current-affairs" />
+        
+        <link rel="stylesheet" type='text/css' href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" type='text/css' href="./styles/style.min.css">
+
+        <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="../bower_components/bootstrap/js/compressed.min.js"></script>
+        <script src="../bower_components/angular/angular.min.js"></script>
+        <script src="../bower_components/angular-route/angular-route.min.js"></script>
+        <script src="../bower_components/angular-cookies/angular-cookies.min.js"></script>
+        <script src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+        <script src="./scripts/script.min.js"></script>
+    </head>
+   
+    <body ng-controller="MainController" style="height:100%;">
+        <div style="position: fixed; top: 0px; left: 0px; height: 100%; width: 100%; background-color: black; opacity: 0.7; z-index:10000;" ng-show="loading"></div>
+        <div style="background-color: white; position: fixed; top: 40%; left: 50%; transform: translate(-50%, -50%); height: 52px; width: 52px; z-index:10001; padding: 12px; border-radius:50%;" ng-show="loading">
+            <div class="mdl-spinner mdl-js-spinner is-active"></div>
+        </div>
+        <div id='side-panel' class="hidden-xs">
+            <div id='brand-name'><img src="./resources/logo.svg" style="height: 36px; width: 90px;"></div>
+            <div style="height: 50px;"></div>
+            <div id="major-categories">
+                <div id="live-categories">
+                    <div class="categories active">
+                        <img src="./resources/current-affairs.svg" style="margin-right: 6px;">
+                        <span>Current Affairs</span>
+                    </div>
+                </div>
+                <div style="height: 60px;"></div>
+                <div id="coming-soon-banner">COMING SOON</div>
+                <div id="coming-soon-banner-triangle"></div>
+                <div style="clear: both;"></div>
+                <div style="height: 12px;"></div>
+                <div id="coming-soon-categories">
+                    <div class="categories">
+                        <img src="./resources/mock-test.svg" style="margin-right: 6px;">
+                        <span>Mock Test</span>
+                    </div>
+                    <div class="categories">
+                        <img src="./resources/live-test.svg" style="margin-right: 6px;">
+                        <span>Live Test</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId      : '532507050256337',
+                    cookie     : true,  // enable cookies to allow the server to access 
+                    // the session
+                    xfbml      : true,  // parse social plugins on this page
+                    version    : 'v2.5' // use graph api version 2.5
+                });
+
+                // Now that we've initialized the JavaScript SDK, we call 
+                // FB.getLoginStatus().  This function gets the state of the
+                // person visiting this page and can return one of three states to                // the callback you provide.  They can be:
+                //
+                // 1. Logged into your app ('connected')
+                // 2. Logged into Facebook, but not your app ('not_authorized')
+                // 3. Not logged into Facebook and can't tell if they are logged into
+                //    your app or not.
+                //
+                // These three cases are handled in the callback function.
+
+                //FB.getLoginStatus(function(response) {
+                  //  statusChangeCallback(response);
+                //});
+
+            };
+
+            // Load the SDK asynchronously
+            (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/en_US/sdk.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+          // Here we run a very simple test of the Graph API after login is
+          // successful.  See statusChangeCallback() for when this call is made.
+        </script>
+        
+        <script>
+            +function(l,y,t,i,c,s) {
+                l['LocalyticsGlobal'] = i;
+                l[i] = function() { (l[i].q = l[i].q || []).push(arguments) };
+                l[i].t = +new Date;
+                (s = y.createElement(t)).type = 'text/javascript';
+                s.src = '//web.localytics.com/v3/localytics.js';
+                (c = y.getElementsByTagName(t)[0]).parentNode.insertBefore(s, c);
+                ll('init', '8a2d88eca6e02b98f2babec-74c10676-f58e-11e5-6e1c-002dea3c3994', {} /* Options */);
+            }(window, document, 'script', 'll');
+        </script>
+        
+        <!-- Share dialog box opens -->
+        <div class="modal fade" id="shareModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog my-modal-dialog" role="document">
+                <div class="modal-content" style="border-radius: 2px; background-color: #ffffff;">
+                    <div class="row" style="margin: 0px; width: 100%;">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" style="padding-right: 6px;">&times;</span></button>
+                        <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3">
+                            <div style="height: 18px;"></div>
+                            <div style="text-align: center;">
+                                <img src="./resources/monthlydigest-fb%20share.svg">
+                            </div>
+                            <div style="height: 18px;"></div>
+                            <div style="text-align: center; font-style:'robMed'; font-size: 22px; color: #212121; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">Monthly Digest</div>
+                            <div style="height: 30px;"></div>
+                            <div style="text-align: center; font-style:'robReg'; font-size: 15px; color: #212121; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;">Monthly digest is in VIP zone. Please login and share Preppo on facebook to get access.</div>
+                            <div style="height: 30px;"></div>
+                            <div class="social-login-button" style="background-color: #3b5998; letter-spacing: 2px;" ng-click="fb()">
+                                <img src="./resources/fb-icon.svg" style="margin-right: 12px;">LOGIN AND SHARE
+                            </div>
+                            <div style="height: 36px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Share dialog box ends-->
+        
+        <div id='main-panel'>
+            <div ng-view style="height: 100%;"></div>
+        </div>
+        
+        <div id="drawer-backdrop" ng-show="isDrawerOpen" ng-click="tester()"></div>
+        <div id="drawer" ng-class="{ 'open': isDrawerOpen, 'close': !isDrawerOpen }">     
+            <span style="font-size: 18px; color: white;" class="glyphicon glyphicon-menu-hamburger" ng-click="tester()"></span>
+            <div style="padding-top: 18px; color: white;">Select Language</div>
+            <div style="height: 6px;"></div>
+            <div class="lang-font" style="float: left; padding: 6px 0px;">Eng</div>
+            <div style="float: left; padding: 6px 12px;">
+                <div class="toggle-button" ng-click="changeLang()">
+                    <button ng-class="{ 'left': user.userInfo.lang == 'english', 'right': user.userInfo.lang == 'hindi' }"></button>
+                </div>
+            </div>
+            <div class="lang-font" style="float: left; padding: 6px 12px 6px 3px;">हिंदी</div>
+            <div style="clear: both;"></div>
+            <div style="height: 18px;"></div>
+            <a class="download-app-button" style="text-decoration: none;" target="_blank" href="https://goo.gl/82Wvij"><img src="./resources/app.svg" style="margin-right: 6px;" >DOWNLOAD APP</a>
+        </div>
+    </body>
+
+</html>

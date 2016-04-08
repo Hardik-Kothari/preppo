@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="9px" height="15px" viewBox="0 0 9 15" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.5.2 (25235) - http://www.bohemiancoding.com/sketch -->
+    <title>Path</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Web" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Login" sketch:type="MSArtboardGroup" transform="translate(-688.000000, -590.000000)" fill="#FFFFFF">
+            <g id="Facebook-Copy-2" sketch:type="MSLayerGroup" transform="translate(655.000000, 573.000000)">
+                <g id="Facebook-+-Path" transform="translate(33.000000, 16.000000)" sketch:type="MSShapeGroup">
+                    <path d="M5.41153549,16 L5.41153549,8.4991218 L7.81912424,8.4991218 L8.13818173,5.91427763 L5.41153549,5.91427763 L5.41562597,4.62053824 C5.41562597,3.94637107 5.49010681,3.5851369 6.61601161,3.5851369 L8.12113806,3.5851369 L8.12113806,1 L5.71320844,1 C2.82089773,1 1.80287936,2.25392752 1.80287936,4.36263929 L1.80287936,5.91457036 L0,5.91457036 L0,8.49941453 L1.80287936,8.49941453 L1.80287936,16 L5.41153549,16 Z" id="Path"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,2 @@
+minify --output style.min.css style.css
+uglifyjs --compress --mangle --output script.min.js dashboard.js material.js

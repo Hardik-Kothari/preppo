@@ -1,0 +1,154 @@
+<div class="template-container">
+    <div class="navbar-top">
+        <span class="glyphicon glyphicon-menu-hamburger mobile-display" style="color: white; font-size: 18px;" ng-click="$parent.tester()"></span>
+        <div class="navbar-headers mobile-hide" ng-click="$parent.goTo('Daily Updates')">
+            DAILY UPDATES
+        </div>
+        <div class="navbar-headers mobile-display" ng-click="$parent.goTo('Daily Updates')">
+            UPDATES
+        </div>
+        <div class="navbar-headers active" ng-click="$parent.goTo('Quiz')">
+            QUIZ
+        </div>
+        <div class="navbar-headers mobile-hide" ng-click="$parent.travel('Monthly Digest')">
+            MONTHLY DIGEST
+        </div>
+        <div class="navbar-headers mobile-display" ng-click="$parent.travel('Monthly Digest')">
+            DIGEST
+        </div>
+        <div class="mobile-hide lang-font" ng-style="{ 'float': 'right', 'padding': '6px 12px 6px 3px', 'color': (user.userInfo.lang == 'hindi')?'white':'rgba(255, 255, 255, 0.5)' }">हिंदी</div>
+        <div class="mobile-hide" style="float: right; padding: 6px 12px;">
+            <div class="toggle-button" ng-click="changeLang()">
+                <button ng-class="{ 'left': user.userInfo.lang == 'english', 'right': user.userInfo.lang == 'hindi' }"></button>
+            </div>
+        </div>
+        <div class="mobile-hide lang-font" ng-style="{ 'float': 'right', 'padding': '6px 0px',  'color': (user.userInfo.lang == 'english')?'white':'rgba(255, 255, 255, 0.5)' }">Eng</div>
+        <a class="download-app-button mobile-hide" style="text-decoration: none; float: right; margin-right: 42px;" target="_blank" href="https://goo.gl/82Wvij"><img src="./resources/app.svg" style="margin-right: 6px;" >DOWNLOAD APP</a>
+    </div>
+    <div class="sub-navbar">
+        <span class="all-quizzes-breadcrumb" ng-click="goBack()">All Quizzes</span>
+        <img src="./resources/breadcrumb-separator.svg">
+        <span id="all-quizzes-quiz-name">{{quiz.nickname}}</span>
+    </div>
+    <div id="quiz-main">
+        <div class="row" style="margin: 0px; padding: 0px;">
+            <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3 quiz-question-card">
+                <div class="quiz-question-card" ng-show="!isLoading">
+                    <div class="question-no-label">
+                        {{currentQuestionIndex}}/{{questions.length}}
+                    </div>
+                    <div class="question-card">
+                        {{questionData.statement[user.userInfo.lang]}}
+                    </div>
+
+                    <div class="option-card" ng-repeat="option in questionData.options[user.userInfo.lang] track by $index" ng-click="checkAnswer($index)" ng-class="{ 'correct-option': attempted && $index==questionData.correctAnswer[user.userInfo.lang], 'incorrect-option': attempted && $index==clickedIndex && $index!=questionData.correctAnswer[user.userInfo.lang]}">
+                        <div class="row" style="margin: 0px;">
+                            <div class="col-xs-1" style="padding: 0px 6px;">
+                                <div class="option-label" ng-show=" !attempted || ( attempted && $index!=clickedIndex && $index!=questionData.correctAnswer[user.userInfo.lang]) ">{{optionLabels[$index]}}</div>
+                                <div class="option-label" style="background-color: #1daf1c;" ng-show=" attempted && $index==questionData.correctAnswer[user.userInfo.lang] "><span class="glyphicon glyphicon-ok"></span></div>
+                                <div class="option-label" style="background-color: #ea5a5a;" ng-show=" attempted && $index==clickedIndex && $index!=questionData.correctAnswer[user.userInfo.lang] "><span class="glyphicon glyphicon-remove"></span></div>
+                            </div>        
+                            <div class="col-xs-11 option-content">
+                                <div>{{option}}</div>
+                                <div class="description-style" ng-if=" $index == questionData.correctAnswer[user.userInfo.lang] &&  questionData.solution[user.userInfo.lang].trim() != '' " ng-show="attempted">
+                                    <b>Description: </b>{{questionData.solution[user.userInfo.lang]}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="quiz-question-card" ng-show="isLoading">
+                    <div style="width: 100%; padding: 30px 24px 12px 24px;">
+                        <div style="width: 85%; background-color: #f5f5f5; height: 24px; margin-bottom: 18px;"></div>
+                        <div style="width: 85%; background-color: #f5f5f5; height: 24px;"></div>
+                    </div>
+                    <div style="border-top: 1px solid #e0e0e0; padding: 12px; width: 100%;">
+                        <div class="row" style="margin: 0px;">
+                            <div class="col-xs-2 col-sm-1" style="padding: 0px 6px;">
+                                <div class="option-label">A</div>
+                            </div>        
+                            <div class="col-xs-10 col-sm-11">
+                                <div style="width: 40%; background-color: #f5f5f5; height: 24px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="border-top: 1px solid #e0e0e0; padding: 12px; width: 100%;">
+                        <div class="row" style="margin: 0px;">
+                            <div class="col-xs-2 col-sm-1" style="padding: 0px 6px;">
+                                <div class="option-label">B</div>
+                            </div>        
+                            <div class="col-xs-10 col-sm-11">
+                                <div style="width: 60%; background-color: #f5f5f5; height: 24px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="border-top: 1px solid #e0e0e0; padding: 12px; width: 100%;">
+                        <div class="row" style="margin: 0px;">
+                            <div class="col-xs-2 col-sm-1" style="padding: 0px 6px;">
+                                <div class="option-label">C</div>
+                            </div>        
+                            <div class="col-xs-10 col-sm-11">
+                                <div style="width: 50%; background-color: #f5f5f5; height: 24px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="border-top: 1px solid #e0e0e0; padding: 12px; width: 100%;">
+                        <div class="row" style="margin: 0px;">
+                            <div class="col-xs-2 col-sm-1" style="padding: 0px 6px;">
+                                <div class="option-label">D</div>
+                            </div>        
+                            <div class="col-xs-10 col-sm-11">
+                                <div style="width: 40%; background-color: #f5f5f5; height: 24px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="next-button" ng-click="next(bottomButtonLabel)">
+        {{bottomButtonLabel}}
+        <img style="margin-left: 12px;" src="./resources/next.svg">
+    </div>
+    <!-- Share dialog box opens -->
+    <div class="modal fade" id="finishModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog my-modal-dialog" role="document">
+            <div class="modal-content" style="border-radius: 2px; background-color: #ffffff; padding: 24px;">
+                <div class="finish-modal-text" style="text-align: center;">
+                    <span>{{attemptedQuestions}}</span>
+                    <br>
+                    <span>Total attempted</span>
+                </div>
+                <div style="height: 12px;"></div>
+                <div style="padding: 0px 24px; border-bottom: 1px solid #E0E0E0;"></div>
+                <div style="float: left; border-right: 1px solid #E0E0E0; text-align: center; width: 50%; margin: 18px 0px;">
+                    <div style="height: 28px; width: 28px; background-color: #1daf1c; color: white; font-size: 15px; line-height: 28px; border-radius: 50%; margin: 0 auto;"><span class="glyphicon glyphicon-ok"></span></div>
+                    <div style="height: 12px;"></div>
+                    <div class="finish-modal-text" style="margin: 0 auto;">{{correctAnswers}}</div>
+                    <div class="finish-modal-text" style="margin: 0 auto;">Correct</div>
+                </div>
+                <div style="float: left; text-align: center; width: 50%; margin: 18px 0px;">
+                    <div style="height: 28px; width: 28px; background-color: #ea5a5a; color: white; font-size: 15px; line-height: 28px; border-radius: 50%; margin: 0 auto;"><span class="glyphicon glyphicon-remove"></span></div>
+                    <div style="height: 12px;"></div>
+                    <div class="finish-modal-text" style="margin: 0 auto;">{{attemptedQuestions - correctAnswers}}</div>
+                    <div class="finish-modal-text" style="margin: 0 auto;">Wrong</div>
+                </div>
+                <div style="clear: both;"></div>
+                <div style="padding: 0px 24px; border-bottom: 1px solid #E0E0E0;"></div>
+                <div style="height: 18px;"></div>
+                <div class="finish-modal-text" style="font-size: 16px; color: #424242; text-align: center;">Rate Quiz</div>
+                <div style="height: 24px;"></div>
+                <div class="rating">
+                    <span ng-repeat="star in isClicked track by $index" ng-class="{'clicked': star}" ng-click="clicked($index)">&#x2605;</span>
+                </div>
+                <div style="height: 18px;"></div>
+                <div style="padding: 0px 24px; border-bottom: 1px solid #E0E0E0;"></div>
+                <div style="height: 18px;"></div>
+                <div style="height: 40px;">
+                    <div class="finish-modal-text" style="margin: 0 auto; height: 40px; width: 160px; line-height: 40px; font-size: 16px; color: white; letter-spacing: 2px; text-align: center; background-color: #3B5998; border-radius: 3px; cursor: pointer;" ng-click="finishQuiz()">FINISH</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Share dialog box ends-->
+</div>
